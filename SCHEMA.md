@@ -159,12 +159,17 @@ Komu sa ozvať (dlaždica Ľudia).
 | `ozvatSaKazdych` | počet dní (celé číslo); `0` = nepravidelne. Aplikácia ponúka 0, 7, 14, 30, 60, 91, 182, 365 |
 | `cas` | `HH:MM` alebo `""` |
 | `hotovo` | `true` \| `false` |
-| `idKalendara` | id udalosti v kalendári; zatiaľ vždy `""` (kalendár ešte nie je pripojený) |
+| `idKalendara` | rezerva, vždy `""` – prepojenie s Outlookom sa do súboru nezapisuje (pozri nižšie) |
 
 - Pole `ludia` je zoradené podľa `meno` (slovenská abeceda), pri zhode podľa `id`.
 - Pripomienky sú zoradené podľa `datum`, potom `cas`, potom `id`.
 - „Na rade“ je: každá nehotová pripomienka s dátumom do 7 dní (aj zmeškaná) a pravidelný kontakt
   `poslednyKontakt + ozvatSaKazdych` (ak `poslednyKontakt` chýba, tak hneď).
+- **Kalendár Outlook** (ak je v zariadení zapnutý): každá nehotová pripomienka s dátumom od dnes má
+  v predvolenom kalendári udalosť. Udalosť nesie skryté vlastnosti (sada `{5d0c9f4e-2b7a-4c3e-8f61-a94b2e7d1c38}`):
+  `PastoraciaZdroj = "ludia"`, `PastoraciaPripomienka = id pripomienky`, `PastoraciaPodpis` (názov, text, dátum, čas
+  v čase zápisu). Aplikácia porovná udalosti s pripomienkami a chýbajúce vytvorí, zmenené upraví, nepotrebné
+  (hotové, zmazané) zmaže. Pravidelný kontakt do kalendára nejde.
 
 ## Ďalšie moduly
 

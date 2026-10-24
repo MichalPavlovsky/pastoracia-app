@@ -1,26 +1,25 @@
-# Odovzdanie – stav k 24. 10. 2026 (večer)
+# Odovzdanie – stav k 24. 10. 2026 (neskoro večer)
 
 ## Hotové
-- Fáza 1 (nasadená na GitHub Pages): kostra, prihlásenie, OneDrive + offline + zlúčenie, Intencie Sopkovce, Farský list, Nastavenia, NAVOD.md.
-- **Rozloženie na 320 px** overené v prehliadači (ukážkový režim) a opravené: riadok intencie (text na celý riadok), karta témy (lišta v jednom riadku, akcie 3 v rade), nadpis v lište, prepínač vzhľadu „Automaticky“.
-- **Ukážkový režim** `?ukazka` (len vývoj, v produkčnom builde nie je).
-- **Pastorácia** (myšlienky): `pastoracia-myslienky.json`, hľadanie bez diakritiky, filter stavu a štítkov, Vložiť odkaz, `#/pastoracia/pridat?url=…`, kopírovanie.
-- **Ľudia** (bez kalendára): `ludia.json`, „Na rade“ (pripomienky + pravidelný kontakt každých N dní), Zavolať/Napísať, „Ozval som sa“, číslo na dlaždici Domov (dnes + zmeškané).
-- SCHEMA.md, NAVOD.md (druhá Skratka „Do myšlienok“) a vault (`Aplikácia – Pastorácia.md`) aktualizované. 126 testov, build OK.
-- **Nič z tohto ešte nie je pushnuté** – čaká na Michalov súhlas.
+- Fáza 1, Pastorácia (myšlienky), Ľudia, rozloženie na 320 px, ukážkový režim `?ukazka` – **pushnuté a nasadené** (commit c83f1d0).
+- **Kalendár Outlook pre Ľudí** (necommitnuté, nepushnuté):
+  - `src/calendar/`: `outlook.ts` (Graph, skryté vlastnosti PastoraciaZdroj/Pripomienka/Podpis), `zosulad.ts` (čo vytvoriť/upraviť/zmazať), `synchronizacia.ts` (jeden beh naraz, zapnutie v zariadení cez localStorage `pastoracia.kalendar`), `pamatovy.ts` (testy, ukážka).
+  - `modules/ludia/model/kalendar.ts` (pripomienky → udalosti), `KalendarLudi.tsx` (prenos 1,5 s po zmene + riadok stavu), Nastavenia → „Pripojiť kalendár Outlook“.
+  - `prihlasenie.ts`: `SCOPES_KALENDAR`, `ziskajTokenKalendara`, `pripojKalendar()` (presmerovanie); chyba pri návrate (napr. zamietnutý súhlas) už nezhodí aplikáciu → `chybaPresmerovania` v Nastaveniach.
+  - `idKalendara` v `ludia.json` ostáva `""` (SCHEMA.md vysvetľuje prečo). NAVOD.md časť 5, vault aktualizovaný. 135 testov, build OK.
 
 ## Čaká na Michala
-- Súhlas s `git push` (nasadí Pastoráciu a Ľudí).
-- Testovací zoznam na iPhone (posledná správa v konverzácii z 24. 10. večer): fáza 1 + nové dlaždice.
-- Rozhodnutie o kalendári pre Ľudí: Outlook (Graph, rovnaké prihlásenie, treba pridať oprávnenie `Calendars.ReadWrite`) alebo Google.
+- Pridať v Azure oprávnenie `Calendars.ReadWrite` (NAVOD.md 5.1) – urobí Michal sám v portáli.
+- Súhlas s commitom a `git push`.
+- Test na iPhone: Nastavenia → Pripojiť kalendár → Ľudia → pripomienka → je v Outlooku?
+- Texty pre Knihy – dodá Michal.
 
 ## Neoverené / riziká
-- Ťahanie tém prstom na iPhone, prihlásenie v PWA z plochy, Skratky.
-- Malé čipy štítkov v karte myšlienky majú výšku ~32 px (menej ako 48 px) – ak sa zle trafujú, zväčšiť.
-- Strážca dĺžky konverzácie (hook) – overiť, že sa spúšťa.
+- Graph `$filter` na skryté vlastnosti nad `/me/events` – overené len testami s falošnou odpoveďou, nie proti skutočnému Outlooku.
+- Tenant grkatpo.sk môže vyžadovať súhlas správcu pre Calendars.ReadWrite.
+- Ťahanie tém prstom na iPhone, Skratky, čipy štítkov ~32 px.
 
 ## Ďalšie kroky
-1. Opraviť, čo Michal nájde pri testovaní.
-2. Skratky „Do Pastorácie“ / „Do myšlienok“ (NAVOD.md, časť 4).
-3. Kalendár k Ľuďom (`src/calendar/types.ts`, pole `idKalendara` v `ludia.json` je pripravené).
-4. Knihy (zamyslenie dňa) – treba s Michalom dohodnúť, odkiaľ brať texty (PDF v OneDrive / web).
+1. Opraviť, čo Michal nájde pri testovaní (aj kalendár).
+2. Knihy (zamyslenie dňa) – podľa textov od Michala.
+3. Skratky „Do Pastorácie“ / „Do myšlienok“ (NAVOD.md, časť 4).

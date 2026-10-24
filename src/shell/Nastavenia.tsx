@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAplikacia } from '../app/kontext'
+import { jeUkazka } from '../app/ukazka'
+import { useStavKalendara } from '../modules/ludia/KalendarLudi'
 import { INTENCIE } from '../modules/intencie-sopkovce/data'
 import { PLAN } from '../modules/farsky-list/data'
 import type { InfoPriecinka } from '../storage/graph'
@@ -14,7 +16,7 @@ const TEMY: Array<{ id: Tema; nazov: string }> = [
 ]
 
 export function Nastavenia() {
-  const { ucet, onedrive, uloziste, prihlasenie } = useAplikacia()
+  const { ucet, onedrive, uloziste, prihlasenie, kalendar } = useAplikacia()
   const [info, setInfo] = useState<InfoPriecinka | null>(null)
   const [chybaInfo, setChybaInfo] = useState('')
   const intencie = useSubor(INTENCIE)
@@ -29,6 +31,12 @@ export function Nastavenia() {
     ulozTemu(t)
     pouziTemu(t)
     nastavTemu(t)
+  }
+
+  const stavKalendara = useStavKalendara()
+  const pripojKalendar = async () => {
+    kalendar.zapni()
+    if (!jeUkazka()) await prihlasenie.pripojKalendar()
   }
 
   const odhlas = async () => {
@@ -56,6 +64,22 @@ export function Nastavenia() {
         <dt>Typ účtu</dt>
         <dd>{ucet.typ === 'pracovny' ? 'pracovný (organizácia)' : 'osobný Microsoft účet'}</dd>
       </dl>
+
+      <h2>Kalendár</h2>
+      <p>Pripomienky z dlaždice Ľudia sa zapíšu do tvojho kalendára Outlook. Zapína sa v každom zariadení zvlášť.</p>
+      {prihlasenie.chybaPresmerovania && <p className="chyba">{prihlasenie.chybaPresmerovania}</p>}
+      {stavKalendara.stav === 'vypnuty' ? (
+        <button className="tlacidlo tlacidlo-hlavne" onClick={() => void pripojKalendar()}>
+          Pripojiť kalendár Outlook
+        </button>
+      ) : (
+        <>
+          <p>Zapnuté. Stav vidno v dlaždici Ľudia.</p>
+          <button className="tlacidlo" onClick={() => kalendar.vypni()}>
+            Vypnúť (udalosti v kalendári ostanú)
+          </button>
+        </>
+      )}
 
       <h2>Dáta v OneDrive</h2>
       <dl className="udaje">

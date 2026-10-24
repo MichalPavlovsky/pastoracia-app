@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { AplikaciaKontext, type Aplikacia } from './app/kontext'
 import { jeUkazka, ukazkovaAplikacia } from './app/ukazka'
 import { Prihlasenie } from './auth/prihlasenie'
+import { KalendarOutlook } from './calendar/outlook'
+import { SynchronizaciaKalendara } from './calendar/synchronizacia'
 import { chybaKonfiguracie, jePovolenaAdresa } from './config'
 import { Shell } from './shell/Shell'
 import { IndexedDbCache } from './storage/cache'
@@ -33,7 +35,8 @@ export default function App() {
         const onedrive = new GraphOneDrive(prihlasenie.ziskajToken)
         const uloziste = new Uloziste(onedrive, new IndexedDbCache())
         uloziste.sledujPripojenie()
-        setFaza({ typ: 'prihlaseny', aplikacia: { prihlasenie, ucet, onedrive, uloziste } })
+        const kalendar = new SynchronizaciaKalendara(new KalendarOutlook(prihlasenie.ziskajTokenKalendara))
+        setFaza({ typ: 'prihlaseny', aplikacia: { prihlasenie, ucet, onedrive, uloziste, kalendar } })
       },
       (e: Error) => setFaza({ typ: 'chyba', sprava: e.message }),
     )

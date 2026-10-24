@@ -6,6 +6,7 @@ import { useSubor } from '../../storage/useSubor'
 import { StavSynchronizacie } from '../../ui/StavSynchronizacie'
 import { LUDIA } from './data'
 import { FormularCloveka } from './FormularCloveka'
+import { KalendarLudi } from './KalendarLudi'
 import { KartaCloveka } from './KartaCloveka'
 import { NaRadeZoznam } from './NaRadeZoznam'
 import {
@@ -69,6 +70,7 @@ export function Ludia(_props: { podcesta: string; parametre: URLSearchParams }) 
   return (
     <section className="obrazovka">
       <StavSynchronizacie stav={stav} subor={subor} />
+      <KalendarLudi data={data} nacitane={stav.stav !== 'nacitava'} dnesny={dnesny} />
 
       <div className="rad-tlacidiel lu-horna">
         <button type="button" className="tlacidlo tlacidlo-hlavne" onClick={() => otvor(null)}>

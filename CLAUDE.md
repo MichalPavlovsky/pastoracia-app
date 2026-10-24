@@ -25,12 +25,12 @@ React 19 + Vite 8 + TypeScript 7 (strict, `noUncheckedIndexedAccess`, `verbatimM
 - `src/modules/intencie-sopkovce/` – kalendár, týždeň, formulár dňa, `model/intencie.ts`
 - `src/modules/farsky-list/` – plán tém, `model/temy.ts`, UI v `temy/`
 - `src/modules/pastoracia/` – myšlienky, `model/myslienky.ts`
-- `src/modules/ludia/` – komu sa ozvať, „Na rade“, pripomienky (zatiaľ bez kalendára), `model/ludia.ts`, odznak na dlaždici
+- `src/modules/ludia/` – komu sa ozvať, „Na rade“, pripomienky → kalendár Outlook, `model/ludia.ts`, `model/kalendar.ts`, odznak na dlaždici
 - `src/modules/knihy/` – zatiaľ „Pripravujeme“ + `types.ts`
 - `src/storage/` – OneDrive cez Graph (eTag/If-Match), IndexedDB, offline fronta, trojcestné zlúčenie konfliktov; modul opíše súbor cez `DefiniciaSuboru`
 - `src/auth/prihlasenie.ts` – MSAL, presmerovanie, authority `common`, `responseMode: query` (hash používa smerovanie)
 - `src/app/smerovanie.ts` – router nad `#hash`; `src/shell/` – lišta, Domov, Nastavenia
-- `src/calendar/types.ts` – miesto pre poskytovateľa kalendára (modul Ľudia)
+- `src/calendar/` – Outlook cez Graph (`outlook.ts`), `zosulad.ts`, `synchronizacia.ts` (zapína sa v zariadení, localStorage `pastoracia.kalendar`)
 
 ## Dáta – formát dodrž presne
 - Záväzný popis: **`SCHEMA.md`**. Súbory číta aj skill `fl` (Farský list) – len číta.
@@ -38,6 +38,6 @@ React 19 + Vite 8 + TypeScript 7 (strict, `noUncheckedIndexedAccess`, `verbatimM
 - Pri zmene formátu alebo cesty uprav aj Michalov vault: `C:\Users\MIchalPC\Desktop\Claude_vault\10 Projekty\Aplikácia – Pastorácia.md` a `AIOS\Skills\farsky-list.md`.
 
 ## Azure
-App registration „Pastorácia“ v tenante grkatpo.sk, osobné aj organizačné účty, SPA. Redirect URI: `http://localhost:5174/` a `https://michalpavlovsky.github.io/pastoracia-app/`. Oprávnenia: Files.ReadWrite, offline_access.
+App registration „Pastorácia“ v tenante grkatpo.sk, osobné aj organizačné účty, SPA. Redirect URI: `http://localhost:5174/` a `https://michalpavlovsky.github.io/pastoracia-app/`. Oprávnenia: Files.ReadWrite, offline_access, Calendars.ReadWrite (pýta sa zvlášť, `SCOPES_KALENDAR`).
 
 Aktuálny stav a ďalšie kroky: `HANDOFF.md`.

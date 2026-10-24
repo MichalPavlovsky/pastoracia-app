@@ -75,7 +75,18 @@ Bez skratky: **Pastorácia → Vložiť odkaz**.
 
 Pri vývoji na PC: `http://localhost:5174/?ukazka` otvorí aplikáciu bez prihlásenia s prázdnymi dátami len v pamäti (na skúšanie obrazoviek; po obnovení stránky zmiznú, do OneDrive sa nič nezapíše). Na GitHub Pages tento režim nie je.
 
-## 5. Keď niečo nejde
+## 5. Kalendár Outlook (pripomienky z Ľudí)
+
+1. **Azure (raz):** [portal.azure.com](https://portal.azure.com) → **App registrations** → **Pastorácia** → **API permissions** → **Add a permission** → **Microsoft Graph** → **Delegated** → `Calendars.ReadWrite` → **Add**.
+2. **V každom zariadení:** Nastavenia → **Pripojiť kalendár Outlook** → Microsoft sa opýta na súhlas → **Prijať**.
+
+Potom sa každá nehotová pripomienka od dnes ďalej sama zapíše do predvoleného kalendára (názov „Meno: dôvod“, v poznámke kontakt):
+- s časom → 15-minútová udalosť, upozornenie 15 min vopred,
+- bez času → celodenná udalosť, upozornenie o 18:00 deň predtým.
+
+Odškrtnutá alebo zmazaná pripomienka sa z kalendára zmaže (minulé udalosti ostávajú). Udalosť upravená ručne v Outlooku sa neprepíše, kým sa nezmení pripomienka.
+
+## 6. Keď niečo nejde
 
 | Príznak | Riešenie |
 |---|---|
@@ -83,5 +94,6 @@ Pri vývoji na PC: `http://localhost:5174/?ukazka` otvorí aplikáciu bez prihl�
 | „Treba sa znova prihlásiť“ | Tlačidlo **Prihlásiť sa znova** v Nastaveniach. |
 | Oranžová bodka | Zmena je v telefóne, odošle sa po pripojení k internetu. |
 | „Treba potvrdiť zlúčenie“ | To isté sa zmenilo aj na inom zariadení – v Nastaveniach vyber **Potvrdiť zlúčenie** alebo **Ponechať verziu z iného zariadenia**. |
+| „Kalendár treba znova pripojiť“ alebo „Need admin approval“ | Chýba bod 5.1 alebo súhlas; ak organizácia nedovolí súhlas používateľovi, musí ho dať správca tenantu (Enterprise applications → Pastorácia → **Grant admin consent**). |
 | AADSTS50011 pri prihlásení | V Azure chýba presná adresa (bod 2.4). |
 | Na GitHub Pages biela stránka / chyba konfigurácie | Chýbajú premenné z bodu 2.2 → doplň ich a v **Actions** spusti nasadenie znova (**Run workflow**). |

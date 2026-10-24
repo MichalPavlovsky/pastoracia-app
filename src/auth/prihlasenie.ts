@@ -14,6 +14,8 @@ import { config } from '../config'
 import { ChybaPrihlasenia, ChybaSiete } from '../storage/types'
 
 export const SCOPES = ['Files.ReadWrite', 'offline_access']
+// kalendár si pýtame zvlášť, aby OneDrive fungoval aj bez neho
+export const SCOPES_KALENDAR = ['Calendars.ReadWrite']
 
 export interface Ucet {
   meno: string
@@ -39,6 +41,8 @@ export class Prihlasenie {
   })
 
   private spustenie: Promise<AccountInfo | null> | null = null
+  /** chyba z návratu z Microsoftu pri už prihlásenom účte (napr. súhlas s kalendárom), inak "" */
+  chybaPresmerovania = ''
 
   /** Spracuje návrat z prihlasovacej stránky. Vráti prihlásený účet alebo null. */
   spusti(): Promise<AccountInfo | null> {
@@ -48,7 +52,14 @@ export class Prihlasenie {
 
   private async spustiRaz(): Promise<AccountInfo | null> {
     await this.pca.initialize()
-    const vysledok = await this.pca.handleRedirectPromise()
+    let vysledok = null
+    try {
+      vysledok = await this.pca.handleRedirectPromise()
+    } catch (e) {
+      // napr. zamietnutý súhlas s kalendárom – prihlásenie samo ostáva platné
+      if (this.pca.getAllAccounts().length === 0) throw e
+      this.chybaPresmerovania = (e as Error).message
+    }
     const ucet = vysledok?.account ?? this.pca.getActiveAccount() ?? this.pca.getAllAccounts()[0] ?? null
     if (ucet) this.pca.setActiveAccount(ucet)
     return ucet
@@ -72,15 +83,24 @@ export class Prihlasenie {
     }
   }
 
+  /** Súhlas s prístupom ku kalendáru (presmerovanie na Microsoft). */
+  pripojKalendar(): Promise<void> {
+    return this.pca.acquireTokenRedirect({ scopes: SCOPES_KALENDAR, account: this.pca.getActiveAccount() ?? undefined })
+  }
+
   /** Pre storage: token pre Microsoft Graph. Nikdy nepresmeruje – to urobí až používateľ. */
-  ziskajToken = async (obnov = false): Promise<string> => {
+  ziskajToken = (obnov = false): Promise<string> => this.token(SCOPES, obnov, 'Treba sa znova prihlásiť')
+
+  ziskajTokenKalendara = (obnov = false): Promise<string> => this.token(SCOPES_KALENDAR, obnov, 'Kalendár treba znova pripojiť')
+
+  private async token(scopes: string[], obnov: boolean, sprava: string): Promise<string> {
     const account = this.pca.getActiveAccount()
     if (!account) throw new ChybaPrihlasenia()
     try {
-      const r = await this.pca.acquireTokenSilent({ scopes: SCOPES, account, forceRefresh: obnov })
+      const r = await this.pca.acquireTokenSilent({ scopes, account, forceRefresh: obnov })
       return r.accessToken
     } catch (e) {
-      if (e instanceof InteractionRequiredAuthError) throw new ChybaPrihlasenia()
+      if (e instanceof InteractionRequiredAuthError) throw new ChybaPrihlasenia(sprava)
       if (!navigator.onLine) throw new ChybaSiete()
       throw e
     }

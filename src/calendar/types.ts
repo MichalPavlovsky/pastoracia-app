@@ -1,20 +1,33 @@
-// Miesto pre „poskytovateľa kalendára“ (modul Ľudia). Zatiaľ bez implementácie.
-// Neskôr: Outlook cez Microsoft Graph alebo Google Calendar.
+// Poskytovateľ kalendára pre modul Ľudia. Udalosti nesú skrytú značku s id pripomienky,
+// takže stav sa nikam neukladá – vždy sa porovná zoznam udalostí s pripomienkami.
 
 export interface UdalostKalendara {
-  id: string
+  /** id pripomienky z ludia.json */
+  idPripomienky: string
   nazov: string
+  text: string
   /** RRRR-MM-DD */
   datum: string
   /** HH:MM alebo "" pre celodennú udalosť */
   cas: string
-  poznamka: string
+}
+
+export interface UlozenaUdalost {
+  /** id udalosti u poskytovateľa */
+  id: string
+  idPripomienky: string
+  /** podpisUdalosti() v čase zápisu – telo udalosti si Outlook upravuje, preto neporovnávame jeho */
+  podpis: string
+}
+
+export function podpisUdalosti(u: UdalostKalendara): string {
+  return JSON.stringify([u.nazov, u.text, u.datum, u.cas])
 }
 
 export interface PoskytovatelKalendara {
-  readonly nazov: 'outlook' | 'google'
-  pripojeny(): Promise<boolean>
-  vytvorPripomienku(u: Omit<UdalostKalendara, 'id'>): Promise<UdalostKalendara>
-  upravPripomienku(u: UdalostKalendara): Promise<void>
-  zmazPripomienku(id: string): Promise<void>
+  /** naše udalosti, ktoré začínajú `odDatumu` alebo neskôr */
+  nacitaj(odDatumu: string): Promise<UlozenaUdalost[]>
+  vytvor(u: UdalostKalendara): Promise<void>
+  uprav(id: string, u: UdalostKalendara): Promise<void>
+  zmaz(id: string): Promise<void>
 }
