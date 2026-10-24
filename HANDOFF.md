@@ -5,26 +5,14 @@
 - Farský list: téma sa dá ťahať aj do iného týždňa (jeden `DndContext` vo `FarskyList.tsx`, `presunTemuNa` v `model/temy.ts`) – pushnuté.
 - Overené Michalom na iPhone: prihlásenie, skratky Do Pastorácie a Do Ľudí, štítky, 📅 z ikony na ploche, offline, odznak na dlaždici Ľudia (ráta len dnes + zmeškané – tak je to správne).
 
-## Rozpracované: modul Knihy (zamyslenie dňa)
-Rozhodnutia Michala:
-- Úryvky ~2 min čítania, **jedna kniha naraz**, aktívne vždy **3 knihy**. Keď ostane posledná, aplikácia upozorní „Treba načítať nové knihy“; Claude sa opýta a spracuje ďalšie 2 z rebríčka.
-- **České knihy ostávajú po česky** (celý preklad chránenej knihy nerobíme – agenti to odmietli).
-- Rebríček 37 kníh: vault `C:\Users\MIchalPC\Desktop\Claude_vault\10 Projekty\Knihy – rebríček.md` (stĺpec stavu treba udržiavať). Zdroj kníh: OneDrive pracovného účtu `Knihy` (= `Knihy (1)`), `Materiály`.
-- Formát dát je už v **`SCHEMA.md`**: `knihy.json` (píše len Claude, app len číta) a `knihy-stav.json` (píše app: `precitane`, `oblubene`).
-
-Spracované knihy (JSON jednej knihy = prvok poľa `knihy` v `knihy.json`) – v `.knihy-praca/` v koreni projektu (v `.gitignore`):
-1. `kniha-milovat-a-ctit.json` – 37 úryvkov (agent z textovej vrstvy PDF), skontrolované.
-2. `kniha-5-jazykov-lasky.json` – 113 úryvkov, česky, OCR strán v `.knihy-praca/ocr-5-jazykov-lasky/` (strana PDF 1 = s. 6, kniha začína 1. kapitolou).
-   **Treba opraviť ručne:** na začiatku 10 kapitol OCR stratilo ozdobnú iniciálu (úryvky 001, 007, 012, 023, 038, 059, 073, 087, 101, 108 – napr. „ark Twain“ → „Mark Twain“, „okud“ → „Pokud“, 007 začína „X*vo áska“). Pozri obrázok prvej strany kapitoly (PyMuPDF render) a doplň; v 023 je na začiatku zlepený nadpis kapitoly – odstrániť. 001 a 073 začínajú v strede vety – overiť, či niečo nechýba.
-3. `kniha-nasledovanie-krista.json` – 196 úryvkov (agent; vydanie SSV, `Knihy/Knižky od Valiky II/Tomáš Kempenský - Nasledovanie Krista.pdf`), odseky delené agentom, 43 úryvkov pod 200 slov.
-
-Nástroje: `nastroje/knihy_ocr.py` (sken PDF → `strana-NNN.txt`, Tesseract `C:\Program Files\Tesseract-OCR`, jazyky ces/slk v `%LOCALAPPDATA%\tessdata`), `nastroje/knihy_uryvky.py` (strany → úryvky podľa živého záhlavia kapitoly). Textové PDF: PyMuPDF / MarkItDown (nainštalované v Pythone 3.12).
+## Modul Knihy (zamyslenie dňa) – hotový lokálne, nepushnutý
+- Kód: `src/modules/knihy/` (`model/knihy.ts` + testy, `data.ts`, `Knihy.tsx`, `Odznak.tsx`, `knihy.css`), ukážkové knihy v `src/app/ukazka.ts`. Overené v `?ukazka` na 320 px.
+- Rozhodnutia: úryvky ~2 min, jedna kniha naraz, aktívne 3 knihy; české ostávajú po česky. Rebríček + aktuálny stav: vault `10 Projekty/Knihy – rebríček.md`.
+- Dáta: `.knihy-praca/knihy.json` (346 úryvkov: Milovať a ctiť 37 → Pět jazyků lásky 113 → Nasledovanie Krista 196), OCR iniciály a šum v 5 jazykoch opravené. PDF 5 jazykov je neúplné (končí s. 102 uprostred poslednej kapitoly) – posledný úryvok skrátený na celú vetu.
+- Nástroje: `nastroje/knihy_ocr.py`, `nastroje/knihy_uryvky.py` (Tesseract, PyMuPDF v Pythone 3.12).
 
 ## Ďalšie kroky
-1. Skontrolovať všetky tri JSON (čítateľnosť OCR, nadpisy, dĺžky), spojiť do `knihy.json` v poradí: Milovať a ctiť → Pět jazyků lásky → Nasledovanie Krista. **Pred zápisom do OneDrive `Pastoracia-app/data/` sa opýtať.**
-2. Modul Knihy v aplikácii (`src/modules/knihy/`, záznam v `src/moduly.ts`, nahradiť „Pripravujeme“):
-   - `model/knihy.ts` – parsovanie/serializácia oboch súborov podľa SCHEMA.md, `dnesnyUryvok(knihy, stav, dnes)`, `treba nacitat` (neprečítané má len 1 kniha), zlúčenie stavu (zjednotenie), testy.
-   - `data.ts` – `DefiniciaSuboru` pre oba súbory (knihy.json: `zluc` vráti verziu z OneDrive, app nezapisuje).
-   - UI: dnešný úryvok (nadpis, kniha, miesto, text), „Prečítané ✓“, ⭐ obľúbené, postup v knihe, banner na nové knihy; dlaždica s odznakom, ak dnešný úryvok nie je prečítaný. Doplniť do `src/app/ukazka.ts`.
-3. Zapísať stav kníh do rebríčka (aktívne 1–3).
-4. Michal: zvyšok testov (Intencie).
+1. **Opýtať sa:** skopírovať `.knihy-praca/knihy.json` do OneDrive `Pastoracia-app/data/` a pushnúť.
+2. Michal na iPhone: Knihy (úryvok, Prečítané ✓, Zrušiť, ⭐, Obľúbené, odznak na dlaždici, druhé zariadenie) + zvyšok testov (Intencie).
+3. Keď app ukáže „Treba načítať nové knihy“: opýtať sa a spracovať ďalšie 2 z rebríčka (dočítané knihy z `knihy.json` odstrániť), aktualizovať stav v rebríčku.
+4. Drobnosť: v konzole „Cannot update a component while rendering“ pri `OdznakLudi`/`StavBodka` (existovalo už pred Knihami).

@@ -4,6 +4,7 @@ import type { ComponentType } from 'react'
 import { FarskyList } from './modules/farsky-list/FarskyList'
 import { Intencie } from './modules/intencie-sopkovce/Intencie'
 import { Knihy } from './modules/knihy/Knihy'
+import { OdznakKnih } from './modules/knihy/Odznak'
 import { Ludia } from './modules/ludia/Ludia'
 import { OdznakLudi } from './modules/ludia/Odznak'
 import { Pastoracia } from './modules/pastoracia/Pastoracia'
@@ -63,5 +64,6 @@ export const MODULY: ModulInfo[] = [
     cesta: '/knihy',
     Ikona: IkonaKniha,
     Obrazovka: Knihy,
+    Odznak: OdznakKnih,
   },
 ]
