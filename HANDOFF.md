@@ -1,22 +1,22 @@
-﻿# Odovzdanie â€“ stav k 24. 10. 2026 (veÄŤer)
+# Odovzdanie – stav k 24. 10. 2026 (večer)
 
-## HotovĂ© a nasadenĂ©
-- FĂˇza 1, PastorĂˇcia, Ä˝udia, FarskĂ˝ list, ukĂˇĹľkovĂ˝ reĹľim `?ukazka`, đź“… `.ics` do kalendĂˇra (Outlook cez Graph vypnutĂ˝).
-- FarskĂ˝ list: tĂ©ma sa dĂˇ ĹĄahaĹĄ aj do inĂ©ho tĂ˝ĹľdĹa (jeden `DndContext` vo `FarskyList.tsx`, `presunTemuNa` v `model/temy.ts`) â€“ pushnutĂ©.
-- OverenĂ© Michalom na iPhone: prihlĂˇsenie, skratky Do PastorĂˇcie a Do Ä˝udĂ­, ĹˇtĂ­tky, đź“… z ikony na ploche, offline, odznak na dlaĹľdici Ä˝udia (rĂˇta len dnes + zmeĹˇkanĂ© â€“ tak je to sprĂˇvne).
+## Hotové a nasadené
+- Fáza 1, Pastorácia, Ľudia, Farský list, ukážkový režim `?ukazka`, 📅 `.ics` do kalendára (Outlook cez Graph vypnutý).
+- Farský list: téma sa dá ťahať aj do iného týždňa (jeden `DndContext` vo `FarskyList.tsx`, `presunTemuNa` v `model/temy.ts`) – pushnuté.
+- Overené Michalom na iPhone: prihlásenie, skratky Do Pastorácie a Do Ľudí, štítky, 📅 z ikony na ploche, offline, odznak na dlaždici Ľudia (ráta len dnes + zmeškané – tak je to správne).
 
-## Modul Knihy (zamyslenie dĹa) â€“ nasadenĂ˝, knihy.json v OneDrive
-- KĂłd: `src/modules/knihy/` (`model/knihy.ts` + testy, `data.ts`, `Knihy.tsx`, `Odznak.tsx`, `knihy.css`), ukĂˇĹľkovĂ© knihy v `src/app/ukazka.ts`. OverenĂ© v `?ukazka` na 320 px.
-- Rozhodnutia: Ăşryvky ~2 min, jedna kniha naraz, aktĂ­vne 3 knihy; ÄŤeskĂ© ostĂˇvajĂş po ÄŤesky. RebrĂ­ÄŤek + aktuĂˇlny stav: vault `10 Projekty/Knihy â€“ rebrĂ­ÄŤek.md`.
-- DĂˇta: `.knihy-praca/knihy.json` (346 Ăşryvkov: MilovaĹĄ a ctiĹĄ 37 â†’ PÄ›t jazykĹŻ lĂˇsky 113 â†’ Nasledovanie Krista 196), OCR iniciĂˇly a Ĺˇum v 5 jazykoch opravenĂ©. PDF 5 jazykov je neĂşplnĂ© (konÄŤĂ­ s. 102 uprostred poslednej kapitoly) â€“ poslednĂ˝ Ăşryvok skrĂˇtenĂ˝ na celĂş vetu.
-- NĂˇstroje: `nastroje/knihy_ocr.py`, `nastroje/knihy_uryvky.py` (Tesseract, PyMuPDF v Pythone 3.12).
+## Modul Knihy (zamyslenie dňa) – nasadený, knihy.json v OneDrive
+- Kód: `src/modules/knihy/` (`model/knihy.ts` + testy, `data.ts`, `Knihy.tsx`, `Odznak.tsx`, `knihy.css`), ukážkové knihy v `src/app/ukazka.ts`. Overené v `?ukazka` na 320 px.
+- Rozhodnutia: úryvky ~2 min, jedna kniha naraz, aktívne 3 knihy; české ostávajú po česky. Rebríček + aktuálny stav: vault `10 Projekty/Knihy – rebríček.md`.
+- Dáta: `.knihy-praca/knihy.json` (346 úryvkov: Milovať a ctiť 37 → Pět jazyků lásky 113 → Nasledovanie Krista 196), OCR iniciály a šum v 5 jazykoch opravené. PDF 5 jazykov je neúplné (končí s. 102 uprostred poslednej kapitoly) – posledný úryvok skrátený na celú vetu.
+- Nástroje: `nastroje/knihy_ocr.py`, `nastroje/knihy_uryvky.py` (Tesseract, PyMuPDF v Pythone 3.12).
 
-## NovĂ© (25. 10. 2026)
-- **Farby:** Nastavenia â†’ 6 liturgickĂ˝ch farieb (`data-farba` na `<html>`, `src/ui/tema.ts`, CSS v `zaklad.css`), uloĹľenĂ© v zariadenĂ­.
-- **PDF vo Farskom liste:** `prilohy` pri tĂ©me aj tĂ˝Ĺľdni (SCHEMA.md), nahrĂˇvanie `onedrive.nahrajPrilohu` do `/Pastoracia-app/prilohy/<pondelok>/`, UI `temy/PrilohyPdf.tsx`. Skill fl (vault `AIOS/Skills/farsky-list.md`) z nich vytiahne text.
-- **Zamyslenia z webu:** `zamyslenia-web.json` (pĂ­Ĺˇe len Claude), karta â€žDnes v liturgiiâ€ś v KnihĂˇch (`ZamyslenieWeb.tsx`, `model/zamyslenia.ts`). Postup: vault `AIOS/Skills/zamyslenia-web.md`; naplĂˇnovanĂˇ Ăşloha `zamyslenia-web` (nedeÄľa 19:00, beĹľĂ­ len pri otvorenej aplikĂˇcii Claude). Zdroje: casoslov.sk (byzantskĂ© ÄŤĂ­tania) + opusdei.org/sk-sk/gospel (komentĂˇr). MyĹˇlienky vlastnĂ˝mi slovami, nie kopĂ­rovanĂ©.
+## Nové (25. 10. 2026)
+- **Farby:** Nastavenia → 6 liturgických farieb (`data-farba` na `<html>`, `src/ui/tema.ts`, CSS v `zaklad.css`), uložené v zariadení.
+- **PDF vo Farskom liste:** `prilohy` pri téme aj týždni (SCHEMA.md), nahrávanie `onedrive.nahrajPrilohu` do `/Pastoracia-app/prilohy/<pondelok>/`, UI `temy/PrilohyPdf.tsx`. Skill fl (vault `AIOS/Skills/farsky-list.md`) z nich vytiahne text.
+- **Zamyslenia z webu:** `zamyslenia-web.json` (píše len Claude), karta „Dnes v liturgii“ v Knihách (`ZamyslenieWeb.tsx`, `model/zamyslenia.ts`). Postup: vault `AIOS/Skills/zamyslenia-web.md`; naplánovaná úloha `zamyslenia-web` (nedeľa 19:00, beží len pri otvorenej aplikácii Claude). Zdroje: casoslov.sk (byzantské čítania) + opusdei.org/sk-sk/gospel (komentár). Myšlienky vlastnými slovami, nie kopírované.
 
-## ÄŽalĹˇie kroky
-1. ~~Test na iPhone (Knihy, farby, PDF, Dnes v liturgii) a ruÄŤnĂ˝ beh `zamyslenia-web`~~ â€“ overenĂ© Michalom 24. 10.
-2. Pri â€žTreba naÄŤĂ­taĹĄ novĂ© knihyâ€ś: spracovaĹĄ ÄŹalĹˇie 2 z rebrĂ­ÄŤka.
-3. ~~â€žCannot update a component while renderingâ€ś pri `StavBodka`~~ â€“ opravenĂ© (`Uloziste.subor` oznamuje stav cez `queueMicrotask`), commit lokĂˇlne, ÄŤakĂˇ na push.
+## Ďalšie kroky
+1. ~~Test na iPhone (Knihy, farby, PDF, Dnes v liturgii) a ručný beh `zamyslenia-web`~~ – overené Michalom 24. 10.
+2. ~~„Cannot update a component while rendering“ pri `StavBodka`~~ – opravené (`Uloziste.subor` oznamuje stav cez `queueMicrotask`), pushnuté.
+3. Pri „Treba načítať nové knihy“: spracovať ďalšie 2 z rebríčka.
