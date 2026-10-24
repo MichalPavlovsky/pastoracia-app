@@ -72,7 +72,7 @@ export function ZamyslenieWeb({ den }: { den: string }) {
         <span className="knihy-web-den">Dnes</span>
       ) : (
         <button type="button" className="tlacidlo knihy-web-den" onClick={() => setZvoleny(den)} aria-label="Späť na dnes">
-          {formatDatum(zvoleny).replace(/ d{4}$/, '')} · dnes ↺
+          {formatDatum(zvoleny).replace(/ \d{4}$/, '')} · dnes ↺
         </button>
       )}
       <button
