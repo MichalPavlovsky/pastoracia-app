@@ -183,6 +183,18 @@ export function presunTemu(plan: PlanSubor, id: string, naPondelok: string): Pla
   return nahradTyzden(bez, { ...ciel, temy: [...ciel.temy, { ...n.tema, poradie: ciel.temy.length + 1 }] })
 }
 
+/** Presunie tému (aj v rámci týždňa) tak, aby v cieľovom týždni bola na mieste `index` (0 = prvá). */
+export function presunTemuNa(plan: PlanSubor, id: string, naPondelok: string, index: number): PlanSubor {
+  if (!jePondelok(naPondelok)) throw new Error(`${naPondelok} nie je pondelok`)
+  const n = najdiTemu(plan, id)
+  if (!n) return plan
+  const bez = nahradTyzden(plan, { ...n.tyzden, temy: n.tyzden.temy.filter((t) => t.id !== id) })
+  const ciel = najdiTyzden(bez, naPondelok)
+  const temy = [...ciel.temy]
+  temy.splice(Math.max(0, Math.min(index, temy.length)), 0, n.tema)
+  return nahradTyzden(bez, { ...ciel, temy: temy.map((t, i) => ({ ...t, poradie: i + 1 })) })
+}
+
 /** Nové poradie tém v týždni (po ťahaní). `ids` = všetky id tém v novom poradí. */
 export function zoradTemy(plan: PlanSubor, pondelok: string, ids: string[]): PlanSubor {
   const t = najdiTyzden(plan, pondelok)

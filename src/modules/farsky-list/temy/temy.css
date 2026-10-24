@@ -65,6 +65,11 @@ textarea.tm-vstup {
   background: var(--plocha);
 }
 
+.tm-tyzden.tm-ciel {
+  border-color: var(--hlavna);
+  box-shadow: 0 0 0 2px var(--hlavna);
+}
+
 .tm-tyzden-nadpis {
   display: flex;
   flex-wrap: wrap;

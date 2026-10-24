@@ -1,17 +1,8 @@
 // Karta jedného týždňa: nadpis, témy (zoraditeľné ťahaním) a poznámka týždňa.
 
 import { useState } from 'react'
-import {
-  DndContext,
-  KeyboardSensor,
-  PointerSensor,
-  TouchSensor,
-  closestCenter,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-} from '@dnd-kit/core'
-import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { useDroppable } from '@dnd-kit/core'
+import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {
   najdiTyzden,
   nastavPoznamkuTyzdna,
@@ -27,10 +18,15 @@ import { popisTyzdna } from './popis'
 import { PolozkaTemy } from './PolozkaTemy'
 import './temy.css'
 
+/** id cieľovej plochy týždňa pri ťahaní (témy majú id „t-…“) */
+export const PREDPONA_TYZDNA = 'tyzden:'
+
 interface Props {
   tyzden: TyzdenDat
   /** „tento týždeň“ / „budúci týždeň“ */
   stitok: string
+  /** sem sa práve ťahá téma z iného týždňa */
+  ciel: boolean
   /** všetky zobrazené pondelky */
   tyzdne: string[]
   /** zmena plánu počítaná z aktuálnych dát v čase kliknutia */
@@ -39,16 +35,11 @@ interface Props {
   onUprav: (tema: Tema, pondelok: string) => void
 }
 
-export function Tyzden({ tyzden, stitok, tyzdne, uloz, onNovaTema, onUprav }: Props) {
+export function Tyzden({ tyzden, stitok, ciel, tyzdne, uloz, onNovaTema, onUprav }: Props) {
   const { pondelok, temy, poznamka } = tyzden
   const [poznamkaOtvorena, setPoznamkaOtvorena] = useState(false)
   const ineTyzdne = tyzdne.filter((t) => t !== pondelok)
-
-  const senzory = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 6 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  )
+  const { setNodeRef } = useDroppable({ id: PREDPONA_TYZDNA + pondelok })
 
   const presunNa = (id: string, naIndex: (ids: string[], od: number) => number) =>
     uloz((p) => {
@@ -59,18 +50,16 @@ export function Tyzden({ tyzden, stitok, tyzdne, uloz, onNovaTema, onUprav }: Pr
       return zoradTemy(p, pondelok, arrayMove(ids, od, na))
     })
 
-  const poTahani = (e: DragEndEvent) => {
-    if (!e.over || e.active.id === e.over.id) return
-    const cielId = String(e.over.id)
-    presunNa(String(e.active.id), (ids) => ids.indexOf(cielId))
-  }
-
   const ulozPoznamku = (hodnota: string) => {
     if (hodnota !== poznamka) uloz((p) => nastavPoznamkuTyzdna(p, pondelok, hodnota))
   }
 
   return (
-    <section className="tm-tyzden" aria-label={`Týždeň ${popisTyzdna(pondelok)}`}>
+    <section
+      ref={setNodeRef}
+      className={`tm-tyzden${ciel ? ' tm-ciel' : ''}`}
+      aria-label={`Týždeň ${popisTyzdna(pondelok)}`}
+    >
       <h2 className="tm-tyzden-nadpis">
         {popisTyzdna(pondelok)}
         {stitok && <span className="tm-stitok">{stitok}</span>}
@@ -78,29 +67,27 @@ export function Tyzden({ tyzden, stitok, tyzdne, uloz, onNovaTema, onUprav }: Pr
 
       {temy.length === 0 ? (
         <div className="tm-prazdny">
-          <span>Zatiaľ bez tém</span>
+          <span>{ciel ? 'Pusť tému sem' : 'Zatiaľ bez tém'}</span>
         </div>
       ) : (
-        <DndContext sensors={senzory} collisionDetection={closestCenter} onDragEnd={poTahani}>
-          <SortableContext items={temy.map((t) => t.id)} strategy={verticalListSortingStrategy}>
-            <ul className="tm-temy">
-              {temy.map((t, i) => (
-                <PolozkaTemy
-                  key={t.id}
-                  tema={t}
-                  ineTyzdne={ineTyzdne}
-                  prvy={i === 0}
-                  posledny={i === temy.length - 1}
-                  onStav={() => uloz((p) => prepniStav(p, t.id))}
-                  onPosun={(smer) => presunNa(t.id, (_ids, od) => od + smer)}
-                  onUprav={() => onUprav(t, pondelok)}
-                  onPresun={(na) => uloz((p) => presunTemu(p, t.id, na))}
-                  onZmaz={() => uloz((p) => zmazTemu(p, t.id))}
-                />
-              ))}
-            </ul>
-          </SortableContext>
-        </DndContext>
+        <SortableContext items={temy.map((t) => t.id)} strategy={verticalListSortingStrategy}>
+          <ul className="tm-temy">
+            {temy.map((t, i) => (
+              <PolozkaTemy
+                key={t.id}
+                tema={t}
+                ineTyzdne={ineTyzdne}
+                prvy={i === 0}
+                posledny={i === temy.length - 1}
+                onStav={() => uloz((p) => prepniStav(p, t.id))}
+                onPosun={(smer) => presunNa(t.id, (_ids, od) => od + smer)}
+                onUprav={() => onUprav(t, pondelok)}
+                onPresun={(na) => uloz((p) => presunTemu(p, t.id, na))}
+                onZmaz={() => uloz((p) => zmazTemu(p, t.id))}
+              />
+            ))}
+          </ul>
+        </SortableContext>
       )}
       <div className="rad-tlacidiel">
         <button type="button" className="tlacidlo" onClick={() => onNovaTema(pondelok)}>

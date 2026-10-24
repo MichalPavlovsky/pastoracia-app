@@ -7,6 +7,7 @@ import {
   prazdnyPlan,
   prepniStav,
   presunTemu,
+  presunTemuNa,
   pridajTemu,
   serializujPlan,
   temaNaFormular,
@@ -131,6 +132,27 @@ describe('úpravy plánu', () => {
       ['A', 1],
       ['Dušičky – odpustky', 2],
     ])
+  })
+
+  it('ťahanie do iného týždňa na konkrétne miesto', () => {
+    let p = pridajTemu(parsujPlan(PRIKLAD), '2026-11-09', form('A')).plan
+    p = pridajTemu(p, '2026-11-09', form('B')).plan
+    p = presunTemuNa(p, 't-1', '2026-11-09', 1)
+    expect(p.tyzdne.map((t) => t.pondelok)).toEqual(['2026-11-09'])
+    expect(p.tyzdne[0]!.temy.map((t) => [t.nazov, t.poradie])).toEqual([
+      ['A', 1],
+      ['Dušičky – odpustky', 2],
+      ['B', 3],
+    ])
+  })
+
+  it('ťahanie v rámci týždňa a do prázdneho týždňa', () => {
+    const a = pridajTemu(parsujPlan(PRIKLAD), '2026-11-02', form('A'))
+    let p = presunTemuNa(a.plan, 't-1', '2026-11-02', 1)
+    expect(p.tyzdne[0]!.temy.map((t) => t.nazov)).toEqual(['A', 'Dušičky – odpustky'])
+    p = presunTemuNa(p, a.id, '2026-11-23', 0)
+    expect(p.tyzdne.map((t) => t.pondelok)).toEqual(['2026-11-02', '2026-11-23'])
+    expect(p.tyzdne[1]!.temy[0]).toMatchObject({ nazov: 'A', poradie: 1 })
   })
 
   it('zmena poradia ťahaním', () => {
