@@ -204,6 +204,35 @@ textarea.tm-vstup {
   margin-top: 8px;
 }
 
+/* Upraviť / Presunúť / Zmazať vždy v jednom riadku */
+.tm-akcie {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.tm-akcie .tlacidlo {
+  min-width: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+/* úzky telefón: menej okrajov, aby sa lišta témy zmestila do jedného riadku */
+@media (max-width: 380px) {
+  .tm-tyzden {
+    padding: 10px;
+  }
+
+  .tm-tema {
+    padding: 8px;
+  }
+
+  .tm-stav {
+    padding: 0 10px;
+  }
+}
+
 .tm-otazka {
   margin: 0;
 }

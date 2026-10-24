@@ -89,7 +89,83 @@ Vlastné návrhy tém na Farský list.
 - Témy v týždni sú zoradené podľa `poradie`.
 - Týždeň bez tém aj bez poznámky sa neukladá.
 
+## pastoracia-myslienky.json
+
+Myšlienky a nápady (dlaždica Pastorácia).
+
+```json
+{
+  "verzia": 1,
+  "myslienky": [
+    {
+      "id": "m-3f2b8c1e-6d4a-4b7e-9c11-2a5d8e0f7b34",
+      "nazov": "Advent s rodinou",
+      "text": "Adventný veniec doma – krátka modlitba pri zapaľovaní sviec.",
+      "stitky": ["advent", "rodiny"],
+      "zdroje": ["https://..."],
+      "vytvorene": "2026-10-24",
+      "stav": "napad"
+    }
+  ]
+}
+```
+
+| Pole | Hodnoty |
+|---|---|
+| `id` | `"m-"` + UUID |
+| `nazov`, `text` | aspoň jedno z nich je neprázdne; `text` môže mať viac riadkov |
+| `stitky` | zoznam štítkov bez duplicít (bez ohľadu na veľkosť písmen), inak `[]` |
+| `zdroje` | zoznam odkazov, inak `[]` |
+| `vytvorene` | dátum vytvorenia, pri úprave sa nemení |
+| `stav` | `"napad"` \| `"rozpracovane"` \| `"hotove"` |
+
+- Pole `myslienky` je zoradené podľa `vytvorene` **zostupne** (najnovšie prvé), pri zhode podľa `id`.
+
+## ludia.json
+
+Komu sa ozvať (dlaždica Ľudia).
+
+```json
+{
+  "verzia": 1,
+  "ludia": [
+    {
+      "id": "c-3f2b8c1e-6d4a-4b7e-9c11-2a5d8e0f7b34",
+      "meno": "Anna Nováková",
+      "kontakt": "0905 123 456",
+      "poznamka": "",
+      "poslednyKontakt": "2026-10-20",
+      "ozvatSaKazdych": 30,
+      "pripomienky": [
+        {
+          "id": "p-9a1c…",
+          "datum": "2026-11-03",
+          "cas": "",
+          "dovod": "po operácii",
+          "hotovo": false,
+          "idKalendara": ""
+        }
+      ]
+    }
+  ]
+}
+```
+
+| Pole | Hodnoty |
+|---|---|
+| `id` | `"c-"` + UUID (človek), `"p-"` + UUID (pripomienka) |
+| `kontakt` | telefón, e-mail alebo iný text, inak `""` |
+| `poslednyKontakt` | dátum alebo `""` |
+| `ozvatSaKazdych` | počet dní (celé číslo); `0` = nepravidelne. Aplikácia ponúka 0, 7, 14, 30, 60, 91, 182, 365 |
+| `cas` | `HH:MM` alebo `""` |
+| `hotovo` | `true` \| `false` |
+| `idKalendara` | id udalosti v kalendári; zatiaľ vždy `""` (kalendár ešte nie je pripojený) |
+
+- Pole `ludia` je zoradené podľa `meno` (slovenská abeceda), pri zhode podľa `id`.
+- Pripomienky sú zoradené podľa `datum`, potom `cas`, potom `id`.
+- „Na rade“ je: každá nehotová pripomienka s dátumom do 7 dní (aj zmeškaná) a pravidelný kontakt
+  `poslednyKontakt + ozvatSaKazdych` (ak `poslednyKontakt` chýba, tak hneď).
+
 ## Ďalšie moduly
 
-Pastorácia, Ľudia a Knihy majú zatiaľ len TypeScript typy
-(`src/modules/*/types.ts`). Ich súbory sa doplnia sem, keď sa budú tvoriť.
+Knihy má zatiaľ len TypeScript typy (`src/modules/knihy/types.ts`). Súbor sa doplní sem, keď sa bude tvoriť.

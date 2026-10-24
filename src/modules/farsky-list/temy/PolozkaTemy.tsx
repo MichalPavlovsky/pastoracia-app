@@ -93,7 +93,7 @@ export function PolozkaTemy({ tema, ineTyzdne, prvy, posledny, onStav, onPosun, 
       {tema.poznamka.trim() !== '' && <p className="tm-poznamka">{tema.poznamka}</p>}
 
       {rezim === null && (
-        <div className="rad-tlacidiel">
+        <div className="tm-akcie">
           <button type="button" className="tlacidlo" onClick={onUprav}>
             Upraviť
           </button>

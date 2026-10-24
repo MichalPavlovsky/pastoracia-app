@@ -1,0 +1,275 @@
+/* Ľudia – komu sa ozvať. Predpona lu-. */
+
+.lu-horna {
+  margin: 12px 0;
+}
+
+.lu-zalozky {
+  margin: 12px 0;
+}
+
+.lu-formular {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border: 2px solid var(--hlavna);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+}
+
+.lu-formular-nadpis {
+  margin: 0 0 0.5rem;
+}
+
+.lu-pole {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  margin: 0 0 12px;
+}
+
+.lu-popis {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  color: var(--text-slabsi);
+  font-size: 0.9rem;
+}
+
+.lu-vstup {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--pozadie);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+}
+
+textarea.lu-vstup {
+  resize: vertical;
+}
+
+.lu-pomoc {
+  color: var(--text-slabsi);
+  font-size: 0.9rem;
+}
+
+.lu-hladat {
+  margin-bottom: 12px;
+}
+
+.lu-riadok-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+/* ---------- zoznam a karty ---------- */
+
+.lu-zoznam {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lu-karta {
+  min-width: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+  overflow-wrap: anywhere;
+}
+
+.lu-meno {
+  margin: 0;
+  font-weight: 700;
+}
+
+.lu-info {
+  display: block;
+  margin: 0;
+  color: var(--text-slabsi);
+  font-size: 0.9rem;
+}
+
+.lu-meskanie {
+  color: var(--chyba);
+  font-weight: 600;
+}
+
+.lu-dovod {
+  margin: 4px 0 0;
+}
+
+.lu-prazdne {
+  margin: 16px 0;
+  color: var(--text-slabsi);
+}
+
+.lu-hlavicka {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: calc(100% + 32px);
+  min-height: 48px;
+  margin: -12px -16px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: var(--zaoblenie);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lu-hlavicka:focus-visible,
+.lu-zmaz:focus-visible,
+.lu-odkaz:focus-visible {
+  outline: 3px solid var(--hlavna);
+  outline-offset: 2px;
+}
+
+.lu-detail {
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid var(--okraj);
+}
+
+.lu-kontakt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+}
+
+.lu-kontakt-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.lu-poznamka {
+  margin: 0 0 12px;
+  white-space: pre-line;
+}
+
+.lu-odkaz {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  text-decoration: none;
+}
+
+/* ---------- akcie ---------- */
+
+.lu-akcie {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.lu-akcie-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* hlavná akcia cez celú šírku, Upraviť a Zmazať pod ňou */
+.lu-akcie-3 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lu-akcie-3 > :first-child {
+  grid-column: 1 / -1;
+}
+
+.lu-akcie .tlacidlo {
+  min-width: 0;
+  padding: 0 6px;
+  font-size: 0.95rem;
+}
+
+.lu-pridat {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.lu-potvrdenie p {
+  margin: 12px 0 0;
+  font-weight: 600;
+}
+
+/* ---------- pripomienky ---------- */
+
+.lu-pripomienky {
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.lu-pripomienka {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  border-bottom: 1px solid var(--okraj);
+}
+
+.lu-zaskrtni {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 48px;
+  cursor: pointer;
+}
+
+.lu-zaskrtni input {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--hlavna);
+}
+
+.lu-hotovo .lu-zaskrtni span {
+  color: var(--text-slabsi);
+  text-decoration: line-through;
+}
+
+.lu-zmaz {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-slabsi);
+  font: inherit;
+  cursor: pointer;
+}
+
+.lu-pripomienka-form {
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--pozadie);
+}
+
+.lu-pripomienka-form .lu-pole:last-of-type {
+  margin-bottom: 12px;
+}

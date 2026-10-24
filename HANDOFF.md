@@ -1,31 +1,26 @@
-# Odovzdanie – stav k 24. 10. 2026
+# Odovzdanie – stav k 24. 10. 2026 (večer)
 
-## Hotové (fáza 1)
-- Kostra, SCHEMA.md, dátový model s testami (103 testov).
-- Storage: OneDrive (Graph, eTag), IndexedDB, offline, zlúčenie konfliktov s potvrdením.
-- Prihlásenie Microsoft (MSAL) – overené na localhoste pracovným účtom, zápis do OneDrive funguje.
-- Domov s 5 dlaždicami: **Intencie Sopkovce**, **Farský list** (témy), Pastorácia / Ľudia / Knihy („Pripravujeme“). Intencie a témy boli pôvodne jedna dlaždica – rozdelené na Michalovu žiadosť.
-- Intencie Sopkovce: mesačný kalendár, Tento/Budúci týždeň, formulár dňa, rýchle voľby, ponuka spovede v týždni prvého piatku (nič nepridá samo), kopírovanie bohoslužby.
-- Farský list: 8 týždňov + ďalší, témy (stav jedným klikom, ťahanie ⋮⋮ aj ▲▼, presun, mazanie), Vložiť odkaz zo schránky, prijatie odkazu cez `#/farsky-list/pridat?url=…`.
-- Nastavenia: účet, priečinok OneDrive, stav synchronizácie, vzhľad, odhlásenie.
-- Nasadené na GitHub Pages (beh Actions úspešný, stránka obsahuje správne premenné). NAVOD.md napísaný.
-- Strážca dĺžky konverzácie: hook `~/.claude/hooks/kontext-strazca.mjs` (UserPromptSubmit, hranice 200/300 tis. tokenov) + skill `~/.claude/skills/odovzdanie/SKILL.md`. Overiť, že sa v novej konverzácii naozaj spúšťa.
-- Vault aktualizovaný (cesta k dátam, 5 dlaždíc); Cowork upravil nainštalovaný skill `farsky-list`, aby si vyžiadal priečinok s dátami.
+## Hotové
+- Fáza 1 (nasadená na GitHub Pages): kostra, prihlásenie, OneDrive + offline + zlúčenie, Intencie Sopkovce, Farský list, Nastavenia, NAVOD.md.
+- **Rozloženie na 320 px** overené v prehliadači (ukážkový režim) a opravené: riadok intencie (text na celý riadok), karta témy (lišta v jednom riadku, akcie 3 v rade), nadpis v lište, prepínač vzhľadu „Automaticky“.
+- **Ukážkový režim** `?ukazka` (len vývoj, v produkčnom builde nie je).
+- **Pastorácia** (myšlienky): `pastoracia-myslienky.json`, hľadanie bez diakritiky, filter stavu a štítkov, Vložiť odkaz, `#/pastoracia/pridat?url=…`, kopírovanie.
+- **Ľudia** (bez kalendára): `ludia.json`, „Na rade“ (pripomienky + pravidelný kontakt každých N dní), Zavolať/Napísať, „Ozval som sa“, číslo na dlaždici Domov (dnes + zmeškané).
+- SCHEMA.md, NAVOD.md (druhá Skratka „Do myšlienok“) a vault (`Aplikácia – Pastorácia.md`) aktualizované. 126 testov, build OK.
+- **Nič z tohto ešte nie je pushnuté** – čaká na Michalov súhlas.
 
-## Čaká na Michala – testovací zoznam (na iPhone)
-1. Pridať na plochu, prihlásenie na GitHub Pages (prvé ostré prihlásenie mimo localhostu).
-2. Intencie: uložiť deň, ikonky v kalendári, ponuka spovede prvý piatok, týždenný pohľad „+Mária, Ján“, kopírovanie.
-3. Farský list: nová téma, stav, **ťahanie prstom** (neoverené na dotyku), presun, Vložiť odkaz.
-4. Synchronizácia PC ↔ telefón, súbory v OneDrive na PC, režim lietadlo (oranžová → zelená bodka).
-5. Svetlý/tmavý režim.
+## Čaká na Michala
+- Súhlas s `git push` (nasadí Pastoráciu a Ľudí).
+- Testovací zoznam na iPhone (posledná správa v konverzácii z 24. 10. večer): fáza 1 + nové dlaždice.
+- Rozhodnutie o kalendári pre Ľudí: Outlook (Graph, rovnaké prihlásenie, treba pridať oprávnenie `Calendars.ReadWrite`) alebo Google.
 
 ## Neoverené / riziká
-- Rozloženie na šírke 320–375 px (formulár dňa, kalendár, témy) – nikto ho nevidel na telefóne.
-- Ťahanie tém na iPhone (dnd-kit TouchSensor, oneskorenie 200 ms).
-- Prihlásenie v PWA z plochy na iPhone (presmerovanie MSAL v režime standalone).
+- Ťahanie tém prstom na iPhone, prihlásenie v PWA z plochy, Skratky.
+- Malé čipy štítkov v karte myšlienky majú výšku ~32 px (menej ako 48 px) – ak sa zle trafujú, zväčšiť.
+- Strážca dĺžky konverzácie (hook) – overiť, že sa spúšťa.
 
 ## Ďalšie kroky
-1. Opraviť, čo Michal nájde pri testovaní (dostaneš to stručne, napr. „3 ťahanie nejde“).
-2. Prejsť s ním nastavenie Skratky „Do Pastorácie“ (NAVOD.md, časť 4) – sľúbené.
-3. Fáza 2: modul **Ľudia** + kalendár (Outlook cez Graph alebo Google – rozhodnúť s Michalom). Typy v `src/modules/ludia/types.ts`, rozhranie v `src/calendar/types.ts`. Formát nového súboru doplniť do SCHEMA.md aj do vaultu.
-4. Fáza 3: Knihy (zamyslenie dňa), fáza 4: Pastorácia (myšlienky).
+1. Opraviť, čo Michal nájde pri testovaní.
+2. Skratky „Do Pastorácie“ / „Do myšlienok“ (NAVOD.md, časť 4).
+3. Kalendár k Ľuďom (`src/calendar/types.ts`, pole `idKalendara` v `ludia.json` je pripravené).
+4. Knihy (zamyslenie dňa) – treba s Michalom dohodnúť, odkiaľ brať texty (PDF v OneDrive / web).

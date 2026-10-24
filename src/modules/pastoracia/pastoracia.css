@@ -1,0 +1,279 @@
+/* Pastorácia – myšlienky a nápady. Predpona pa-. */
+
+.pa-horna {
+  margin: 12px 0;
+}
+
+.pa-formular {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border: 2px solid var(--hlavna);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+  scroll-margin-top: 12px;
+}
+
+.pa-formular-nadpis {
+  margin: 0 0 0.5rem;
+}
+
+.pa-popis {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  margin: 0 0 12px;
+  color: var(--text-slabsi);
+  font-size: 0.9rem;
+}
+
+.pa-vstup {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--pozadie);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+}
+
+textarea.pa-vstup {
+  resize: vertical;
+}
+
+textarea.pa-text {
+  overflow: hidden;
+}
+
+.pa-pomoc {
+  color: var(--text-slabsi);
+  font-size: 0.9rem;
+}
+
+/* ---------- hľadanie a filtre ---------- */
+
+.pa-hladat {
+  margin: 12px 0 8px;
+}
+
+/* na úzkom telefóne sa štyri tlačidlá zalomia do dvoch riadkov */
+.pa-prepinac {
+  flex-wrap: wrap;
+}
+
+.pa-prepinac .prepinac-tlacidlo {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 0.9rem;
+}
+
+.pa-filter-stavu {
+  margin-bottom: 8px;
+}
+
+/* úzky telefón: 2 × 2 namiesto jedného osamoteného tlačidla v druhom riadku */
+@media (max-width: 420px) {
+  .prepinac.pa-filter-stavu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pa-filter-stavu .prepinac-tlacidlo:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .pa-filter-stavu .prepinac-tlacidlo:nth-child(n + 3) {
+    border-top: 1px solid var(--okraj);
+  }
+}
+
+.pa-stitky {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.pa-stitok {
+  min-height: 32px;
+  max-width: 100%;
+  padding: 0 12px;
+  border: 1px solid var(--okraj);
+  border-radius: 999px;
+  background: var(--pozadie);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.pa-stitok-velky {
+  min-height: 48px;
+  padding: 0 16px;
+  font-size: 0.95rem;
+}
+
+.pa-stitok[aria-pressed='true'] {
+  border-color: var(--hlavna);
+  background: var(--hlavna);
+  color: var(--hlavna-text);
+}
+
+.pa-filter-stitkov {
+  margin: 0 0 8px;
+}
+
+.pa-prazdny {
+  margin: 24px 0;
+  color: var(--text-slabsi);
+  text-align: center;
+}
+
+/* ---------- zoznam ---------- */
+
+.pa-zoznam {
+  margin: 8px 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.pa-polozka {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+  overflow-wrap: anywhere;
+}
+
+.pa-hotova .pa-obsah {
+  opacity: 0.6;
+}
+
+.pa-hlavicka {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pa-nazov {
+  flex: 1;
+  min-width: 0;
+  margin: 12px 0 0;
+  font-weight: 700;
+}
+
+.pa-stav {
+  flex: none;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 2px solid var(--okraj);
+  border-radius: 999px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pa-stav-rozpracovane {
+  border-color: var(--hlavna);
+  background: var(--hlavna);
+  color: var(--hlavna-text);
+}
+
+.pa-stav-hotove {
+  border-color: var(--ok);
+  color: var(--ok);
+}
+
+.pa-stav:focus-visible,
+.pa-stitok:focus-visible,
+.pa-rozbal:focus-visible {
+  outline: 3px solid var(--hlavna);
+  outline-offset: 2px;
+}
+
+.pa-datum {
+  margin: 0 0 4px;
+  color: var(--text-slabsi);
+  font-size: 0.8rem;
+}
+
+.pa-obsah {
+  margin: 4px 0;
+  white-space: pre-line;
+}
+
+.pa-skratene {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+
+.pa-rozbal {
+  min-height: 48px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pa-zdroje {
+  margin: 4px 0;
+  padding-left: 1.25rem;
+}
+
+.pa-zdroje li {
+  margin: 2px 0;
+}
+
+.pa-panel {
+  margin-top: 8px;
+}
+
+.pa-otazka {
+  margin: 0 0 4px;
+}
+
+/* Upraviť / Kopírovať / Zmazať vždy v jednom riadku */
+.pa-akcie {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.pa-akcie .tlacidlo {
+  min-width: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+@media (max-width: 380px) {
+  .pa-formular {
+    padding: 10px;
+  }
+
+  .pa-polozka {
+    padding: 8px;
+  }
+
+  .pa-stav {
+    padding: 0 10px;
+  }
+}

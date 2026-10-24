@@ -128,15 +128,37 @@
   font-weight: 700;
 }
 
+/* úzky telefón: prepínač a ✕ hore, text intencie na celý riadok pod nimi */
 .fd-text {
-  flex: 1 1 140px;
+  order: 3;
+  flex: 1 1 100%;
   width: auto;
+  min-width: 0;
 }
 
 .fd-mala {
   flex: none;
   width: 48px;
   padding: 0;
+}
+
+.fd-intencia-rad > .fd-mala {
+  margin-left: auto;
+}
+
+@media (min-width: 440px) {
+  .fd-intencia-rad {
+    flex-wrap: nowrap;
+  }
+
+  .fd-text {
+    order: 0;
+    flex: 1 1 auto;
+  }
+
+  .fd-intencia-rad > .fd-mala {
+    margin-left: 0;
+  }
 }
 
 .fd-viac {

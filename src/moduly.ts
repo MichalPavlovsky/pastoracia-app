@@ -5,6 +5,7 @@ import { FarskyList } from './modules/farsky-list/FarskyList'
 import { Intencie } from './modules/intencie-sopkovce/Intencie'
 import { Knihy } from './modules/knihy/Knihy'
 import { Ludia } from './modules/ludia/Ludia'
+import { OdznakLudi } from './modules/ludia/Odznak'
 import { Pastoracia } from './modules/pastoracia/Pastoracia'
 import { IkonaKalendar, IkonaKniha, IkonaList, IkonaLudia, IkonaPastoracia } from './ui/ikony'
 
@@ -17,6 +18,8 @@ export interface ModulInfo {
   Ikona: ComponentType<{ velkost?: number }>
   /** podcesta = zvyšok za cestou modulu, napr. '/temy/pridat' alebo '' */
   Obrazovka: ComponentType<{ podcesta: string; parametre: URLSearchParams }>
+  /** voliteľné číslo v rohu dlaždice (napr. koľko je na rade) */
+  Odznak?: ComponentType
 }
 
 export const MODULY: ModulInfo[] = [
@@ -51,6 +54,7 @@ export const MODULY: ModulInfo[] = [
     cesta: '/ludia',
     Ikona: IkonaLudia,
     Obrazovka: Ludia,
+    Odznak: OdznakLudi,
   },
   {
     id: 'knihy',

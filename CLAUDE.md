@@ -10,7 +10,8 @@ PWA pre gréckokatolíckeho kňaza Michala (farnosť Humenné – Pod Sokolejom,
 - Pri dlhej konverzácii (pripomienka `[kontext-strazca]`) postupuj podľa skillu `odovzdanie`: aktualizuj `HANDOFF.md` a navrhni `/clear` alebo `/compact`.
 
 ## Príkazy
-- `npm run dev` → http://localhost:5174/ (port 5173 obsadzuje Michalova iná aplikácia „Prípravy“, nevypínaj ju)
+- `npm run dev` → http://localhost:5174/ (port 5173 obsadzuje Michalova iná aplikácia „Prípravy“, nevypínaj ju). Často už beží – v prehliadači použi `http://[::1]:5174/`.
+- `http://[::1]:5174/?ukazka` – ukážkový režim bez prihlásenia, dáta len v pamäti (len vo vývoji, `src/app/ukazka.ts`); na kontrolu obrazoviek na 320 px. CSS modulov sa načíta pred `zaklad.css` → pri prepise základných tried treba vyššiu špecifickosť.
 - `npm test` (vitest) · `npm run build` (tsc + vite) · `npm run ikony` (PNG ikony z `public/icon.svg`)
 - Nasadenie: push do `main` → GitHub Actions → https://michalpavlovsky.github.io/pastoracia-app/ (repo `MichalPavlovsky/pastoracia-app`, premenné `VITE_MSAL_CLIENT_ID`, `VITE_POVOLENE_ADRESY` v Actions → Variables)
 
@@ -23,7 +24,9 @@ React 19 + Vite 8 + TypeScript 7 (strict, `noUncheckedIndexedAccess`, `verbatimM
 - `src/moduly.ts` – zoznam dlaždíc (nový modul = priečinok v `src/modules/` + jeden záznam)
 - `src/modules/intencie-sopkovce/` – kalendár, týždeň, formulár dňa, `model/intencie.ts`
 - `src/modules/farsky-list/` – plán tém, `model/temy.ts`, UI v `temy/`
-- `src/modules/{pastoracia,ludia,knihy}/` – zatiaľ „Pripravujeme“ + `types.ts`
+- `src/modules/pastoracia/` – myšlienky, `model/myslienky.ts`
+- `src/modules/ludia/` – komu sa ozvať, „Na rade“, pripomienky (zatiaľ bez kalendára), `model/ludia.ts`, odznak na dlaždici
+- `src/modules/knihy/` – zatiaľ „Pripravujeme“ + `types.ts`
 - `src/storage/` – OneDrive cez Graph (eTag/If-Match), IndexedDB, offline fronta, trojcestné zlúčenie konfliktov; modul opíše súbor cez `DefiniciaSuboru`
 - `src/auth/prihlasenie.ts` – MSAL, presmerovanie, authority `common`, `responseMode: query` (hash používa smerovanie)
 - `src/app/smerovanie.ts` – router nad `#hash`; `src/shell/` – lišta, Domov, Nastavenia

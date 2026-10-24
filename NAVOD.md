@@ -69,6 +69,12 @@ Skratka otvára aplikáciu v Safari (nie ikonu z plochy) – prvýkrát sa v Saf
 
 Bez skratky: skopíruj odkaz a v aplikácii **Farský list → Vložiť odkaz**.
 
+**Druhá skratka „Do myšlienok“** (odkaz do dlaždice Pastorácia): rovnaký postup, len v kroku 5 adresa
+`https://michalpavlovsky.github.io/pastoracia-app/#/pastoracia/pridat?url=`.
+Bez skratky: **Pastorácia → Vložiť odkaz**.
+
+Pri vývoji na PC: `http://localhost:5174/?ukazka` otvorí aplikáciu bez prihlásenia s prázdnymi dátami len v pamäti (na skúšanie obrazoviek; po obnovení stránky zmiznú, do OneDrive sa nič nezapíše). Na GitHub Pages tento režim nie je.
+
 ## 5. Keď niečo nejde
 
 | Príznak | Riešenie |

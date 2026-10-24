@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { AplikaciaKontext, type Aplikacia } from './app/kontext'
+import { jeUkazka, ukazkovaAplikacia } from './app/ukazka'
 import { Prihlasenie } from './auth/prihlasenie'
 import { chybaKonfiguracie, jePovolenaAdresa } from './config'
 import { Shell } from './shell/Shell'
@@ -23,6 +24,7 @@ export default function App() {
 
   useEffect(() => {
     if (faza.typ !== 'spusta') return
+    if (import.meta.env.DEV && jeUkazka()) return setFaza({ typ: 'prihlaseny', aplikacia: ukazkovaAplikacia(prihlasenie) })
     prihlasenie.spusti().then(
       () => {
         const ucet = prihlasenie.ucet()

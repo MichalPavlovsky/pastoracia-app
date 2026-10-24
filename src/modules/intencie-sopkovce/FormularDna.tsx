@@ -401,6 +401,7 @@ function RiadokIntencie({
           type="text"
           className="fd-vstup fd-text"
           aria-label="Text intencie"
+          placeholder="napr. Mária, Ján"
           aria-invalid={chyba ? true : undefined}
           value={it.text}
           onChange={(e) => onUprav({ text: e.target.value })}
