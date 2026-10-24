@@ -7,7 +7,10 @@ import { zamyslenieNaDen } from './model/zamyslenia'
 export function ZamyslenieWeb({ den }: { den: string }) {
   const { data, stav } = useSubor(ZAMYSLENIA)
   const z = zamyslenieNaDen(data, den)
-  if (!z) return null
+  if (!z) {
+    if (stav.stav === 'nacitava') return null
+    return <p className="knihy-prazdny">Na dnes zatiaľ nie je zamyslenie z webu. Pripravuje ho Claude každú nedeľu večer.</p>
+  }
   return (
     <article className="knihy-web" aria-label="Dnes v liturgii">
       <p className="knihy-web-stitok">Dnes v liturgii</p>

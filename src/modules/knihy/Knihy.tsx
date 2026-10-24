@@ -1,5 +1,6 @@
 // Modul „Knihy“: zamyslenie dňa. knihy.json píše len Claude, aplikácia ukladá iba knihy-stav.json.
 
+import { useState } from 'react'
 import { dnes } from '../../lib/datum'
 import { useSubor } from '../../storage/useSubor'
 import { StavSynchronizacie } from '../../ui/StavSynchronizacie'
@@ -41,7 +42,28 @@ function Podpis({ kniha, uryvok }: { kniha: Kniha; uryvok: Uryvok }) {
   )
 }
 
+type Zalozka = 'knihy' | 'web'
+const KLUC_ZALOZKY = 'pastoracia.knihy.zalozka'
+
+function nacitajZalozku(): Zalozka {
+  try {
+    return localStorage.getItem(KLUC_ZALOZKY) === 'web' ? 'web' : 'knihy'
+  } catch {
+    return 'knihy'
+  }
+}
+
 export function Knihy() {
+  const [zalozka, setZalozka] = useState<Zalozka>(nacitajZalozku)
+  const prepni = (z: Zalozka) => {
+    setZalozka(z)
+    try {
+      localStorage.setItem(KLUC_ZALOZKY, z)
+    } catch {
+      // bez úložiska sa výber len nezapamätá
+    }
+  }
+
   const knihy = useSubor(KNIHY)
   const stav = useSubor(KNIHY_STAV)
 
@@ -59,8 +81,19 @@ export function Knihy() {
       <StavSynchronizacie stav={stav.stav} subor={stav.subor} />
       {knihy.stav.stav === 'chyba' && <p className="chyba">Súbor kníh: {knihy.stav.chyba}</p>}
 
-      <ZamyslenieWeb den={den} />
+      <div className="prepinac knihy-zalozky" role="group" aria-label="Zobrazenie">
+        <button type="button" className="prepinac-tlacidlo" aria-pressed={zalozka === 'knihy'} onClick={() => prepni('knihy')}>
+          Knihy
+        </button>
+        <button type="button" className="prepinac-tlacidlo" aria-pressed={zalozka === 'web'} onClick={() => prepni('web')}>
+          Z webu
+        </button>
+      </div>
 
+      {zalozka === 'web' ? (
+        <ZamyslenieWeb den={den} />
+      ) : (
+        <>
       {trebaNacitat(knihy.data, stav.data) && !ziadneKnihy && (
         <div className="oznam oznam-varovanie">
           <p>
@@ -162,6 +195,8 @@ export function Knihy() {
           </ul>
         )}
       </details>
+        </>
+      )}
     </section>
   )
 }

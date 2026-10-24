@@ -15,6 +15,7 @@
 - **Farby:** Nastavenia → 6 liturgických farieb (`data-farba` na `<html>`, `src/ui/tema.ts`, CSS v `zaklad.css`), uložené v zariadení.
 - **PDF vo Farskom liste:** `prilohy` pri téme aj týždni (SCHEMA.md), nahrávanie `onedrive.nahrajPrilohu` do `/Pastoracia-app/prilohy/<pondelok>/`, UI `temy/PrilohyPdf.tsx`. Skill fl (vault `AIOS/Skills/farsky-list.md`) z nich vytiahne text.
 - **Zamyslenia z webu:** `zamyslenia-web.json` (píše len Claude), karta „Dnes v liturgii“ v Knihách (`ZamyslenieWeb.tsx`, `model/zamyslenia.ts`). Postup: vault `AIOS/Skills/zamyslenia-web.md`; naplánovaná úloha `zamyslenia-web` (nedeľa 19:00, beží len pri otvorenej aplikácii Claude). Zdroje: casoslov.sk (byzantské čítania) + opusdei.org/sk-sk/gospel (komentár). Myšlienky vlastnými slovami, nie kopírované.
+- **Knihy – záložky „Knihy | Z webu“** (výber v localStorage `pastoracia.knihy.zalozka`). `zamyslenia-web.json` prvýkrát naplnený ručne 24.–31. 10. z casoslov.sk.
 
 ## Ďalšie kroky
 1. ~~Test na iPhone (Knihy, farby, PDF, Dnes v liturgii) a ručný beh `zamyslenia-web`~~ – overené Michalom 24. 10.
