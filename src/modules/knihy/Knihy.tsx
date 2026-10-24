@@ -17,6 +17,7 @@ import {
   type Kniha,
   type Uryvok,
 } from './model/knihy'
+import { ZamyslenieWeb } from './ZamyslenieWeb'
 import './knihy.css'
 
 function Text({ text }: { text: string }) {
@@ -57,6 +58,8 @@ export function Knihy() {
     <section className="obrazovka knihy">
       <StavSynchronizacie stav={stav.stav} subor={stav.subor} />
       {knihy.stav.stav === 'chyba' && <p className="chyba">Súbor kníh: {knihy.stav.chyba}</p>}
+
+      <ZamyslenieWeb den={den} />
 
       {trebaNacitat(knihy.data, stav.data) && !ziadneKnihy && (
         <div className="oznam oznam-varovanie">

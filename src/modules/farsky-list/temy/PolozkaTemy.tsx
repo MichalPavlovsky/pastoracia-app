@@ -72,7 +72,14 @@ export function PolozkaTemy({ tema, ineTyzdne, prvy, posledny, onStav, onPosun, 
         </button>
       </div>
 
-      <p className="tm-nazov">{tema.nazov}</p>
+      <p className="tm-nazov">
+        {tema.nazov}
+        {tema.prilohy.length > 0 && (
+          <span className="tm-pocet-pdf" aria-label={`PDF: ${tema.prilohy.length}`}>
+            📄 {tema.prilohy.length}
+          </span>
+        )}
+      </p>
 
       {tema.zdroje.length > 0 && (
         <ul className="tm-zdroje">

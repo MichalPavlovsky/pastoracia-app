@@ -100,3 +100,59 @@
   border-radius: var(--zaoblenie);
   background: var(--plocha);
 }
+
+/* ---------- Dnes v liturgii ---------- */
+
+.knihy-web {
+  max-width: 38rem;
+  margin: 0 0 1.5rem;
+  padding: 12px 16px;
+  border: 1px solid var(--okraj);
+  border-left: 4px solid var(--hlavna);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+}
+
+.knihy-web-stitok {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--hlavna);
+}
+
+.knihy .knihy-web-nazov {
+  margin: 0.25rem 0;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.knihy-web-citania {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.knihy-web-myslienka {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.knihy-web-otazka {
+  margin: 0 0 0.5rem;
+  font-style: italic;
+}
+
+.knihy-web-zdroje {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  margin: 0;
+}
+
+.knihy-web-zdroje a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}

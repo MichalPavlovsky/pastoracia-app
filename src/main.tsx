@@ -2,10 +2,11 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
 import App from './App'
-import { nacitajTemu, pouziTemu } from './ui/tema'
+import { nacitajFarbu, nacitajTemu, pouziFarbu, pouziTemu } from './ui/tema'
 import './ui/zaklad.css'
 
 pouziTemu(nacitajTemu())
+pouziFarbu(nacitajFarbu())
 
 // nová verzia sa nainštaluje a stránka sa sama obnoví; na iPhone aplikácia z plochy
 // dlho beží na pozadí, preto kontrolujeme aj pri každom návrate do nej

@@ -218,7 +218,7 @@ describe('DatovySubor – konflikty', () => {
     const pc = new DatovySubor(PLAN, od, new PamatovaCache())
     await mobil.nacitaj()
     await pc.nacitaj()
-    const form = (nazov: string) => ({ nazov, zdroje: '', poznamka: '', stav: 'napad' as const })
+    const form = (nazov: string) => ({ nazov, zdroje: '', poznamka: '', stav: 'napad' as const, prilohy: [] })
     await pc.uloz(pridajTemu(prazdnyPlan(), '2026-11-02', form('Dušičky')).plan)
     await mobil.uloz(pridajTemu(prazdnyPlan(), '2026-11-02', form('Advent')).plan)
     expect(mobil.stav.stav).toBe('synchronizovane')

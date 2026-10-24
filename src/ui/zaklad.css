@@ -50,6 +50,72 @@
   color-scheme: light;
 }
 
+/* Hlavná farba (liturgické farby) cez data-farba na <html>; bez atribútu = bordová. */
+:root[data-farba='zelena'] {
+  --hlavna: #2e6b3a;
+  --hlavna-text: #ffffff;
+}
+:root[data-farba='fialova'] {
+  --hlavna: #5b2a86;
+  --hlavna-text: #ffffff;
+}
+:root[data-farba='modra'] {
+  --hlavna: #1f4e8c;
+  --hlavna-text: #ffffff;
+}
+:root[data-farba='zlata'] {
+  --hlavna: #8a6100;
+  --hlavna-text: #ffffff;
+}
+:root[data-farba='siva'] {
+  --hlavna: #4a4f57;
+  --hlavna-text: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-farba='zelena']:not([data-tema='svetly']) {
+    --hlavna: #7cc48a;
+    --hlavna-text: #0c1a0f;
+  }
+  :root[data-farba='fialova']:not([data-tema='svetly']) {
+    --hlavna: #b48ae0;
+    --hlavna-text: #170a24;
+  }
+  :root[data-farba='modra']:not([data-tema='svetly']) {
+    --hlavna: #7fb0ea;
+    --hlavna-text: #0a1627;
+  }
+  :root[data-farba='zlata']:not([data-tema='svetly']) {
+    --hlavna: #e3b54a;
+    --hlavna-text: #1f1500;
+  }
+  :root[data-farba='siva']:not([data-tema='svetly']) {
+    --hlavna: #c9ced6;
+    --hlavna-text: #15181c;
+  }
+}
+
+:root[data-farba='zelena'][data-tema='tmavy'] {
+  --hlavna: #7cc48a;
+  --hlavna-text: #0c1a0f;
+}
+:root[data-farba='fialova'][data-tema='tmavy'] {
+  --hlavna: #b48ae0;
+  --hlavna-text: #170a24;
+}
+:root[data-farba='modra'][data-tema='tmavy'] {
+  --hlavna: #7fb0ea;
+  --hlavna-text: #0a1627;
+}
+:root[data-farba='zlata'][data-tema='tmavy'] {
+  --hlavna: #e3b54a;
+  --hlavna-text: #1f1500;
+}
+:root[data-farba='siva'][data-tema='tmavy'] {
+  --hlavna: #c9ced6;
+  --hlavna-text: #15181c;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -427,4 +493,40 @@ h3 {
 
 .intencie-pohlad {
   margin: 12px 0 16px;
+}
+
+/* ---------- výber farby ---------- */
+
+.farby {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.farba {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 64px;
+  padding: 8px 4px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.farba[aria-pressed='true'] {
+  border: 2px solid var(--hlavna);
+  font-weight: 600;
+}
+
+.farba-vzorka {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
 }

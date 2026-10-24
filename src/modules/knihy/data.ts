@@ -15,6 +15,14 @@ import {
   type KnihyStav,
   type KnihySubor,
 } from './model/knihy'
+import {
+  parsujZamyslenia,
+  prazdneZamyslenia,
+  serializujZamyslenia,
+  SUBOR_ZAMYSLENIA,
+  zlucZamyslenia,
+  type ZamysleniaSubor,
+} from './model/zamyslenia'
 
 /** Len na čítanie – aplikácia ho nikdy neukladá. */
 export const KNIHY: DefiniciaSuboru<KnihySubor> = {
@@ -31,4 +39,13 @@ export const KNIHY_STAV: DefiniciaSuboru<KnihyStav> = {
   parsuj: parsujStav,
   serializuj: serializujStav,
   zluc: zlucStav,
+}
+
+/** Len na čítanie – zapisuje ho Claude raz týždenne. */
+export const ZAMYSLENIA: DefiniciaSuboru<ZamysleniaSubor> = {
+  nazov: SUBOR_ZAMYSLENIA,
+  prazdny: prazdneZamyslenia,
+  parsuj: parsujZamyslenia,
+  serializuj: serializujZamyslenia,
+  zluc: zlucZamyslenia,
 }

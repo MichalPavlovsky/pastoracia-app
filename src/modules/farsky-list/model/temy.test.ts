@@ -3,11 +3,13 @@ import {
   dalsiStav,
   najdiTemu,
   nastavPoznamkuTyzdna,
+  odoberPrilohuTyzdna,
   parsujPlan,
   prazdnyPlan,
   prepniStav,
   presunTemu,
   presunTemuNa,
+  pridajPrilohuTyzdna,
   pridajTemu,
   serializujPlan,
   temaNaFormular,
@@ -34,16 +36,18 @@ const PRIKLAD = `{
           ],
           "poznamka": "krátko, 1 strana",
           "poradie": 1,
-          "stav": "plan"
+          "stav": "plan",
+          "prilohy": []
         }
       ],
-      "poznamka": ""
+      "poznamka": "",
+      "prilohy": []
     }
   ]
 }
 `
 
-const form = (nazov: string, zdroje = ''): TemaForm => ({ nazov, zdroje, poznamka: '', stav: 'napad' })
+const form = (nazov: string, zdroje = ''): TemaForm => ({ nazov, zdroje, poznamka: '', stav: 'napad', prilohy: [] })
 
 describe('farsky-list-plan.json – čítanie a zápis', () => {
   it('príklad sa načíta a zapíše bajt po bajte rovnako', () => {
@@ -72,10 +76,11 @@ describe('farsky-list-plan.json – čítanie a zápis', () => {
     expect(p.tyzdne[0]).toEqual({
       pondelok: '2026-11-09',
       temy: [
-        { id: 't-a', nazov: 'A', zdroje: [], poznamka: '', poradie: 1, stav: 'pouzite' },
-        { id: 't-b', nazov: 'B', zdroje: [], poznamka: '', poradie: 2, stav: 'napad' },
+        { id: 't-a', nazov: 'A', zdroje: [], poznamka: '', poradie: 1, stav: 'pouzite', prilohy: [] },
+        { id: 't-b', nazov: 'B', zdroje: [], poznamka: '', poradie: 2, stav: 'napad', prilohy: [] },
       ],
       poznamka: '',
+      prilohy: [],
     })
   })
 
@@ -89,8 +94,30 @@ describe('farsky-list-plan.json – čítanie a zápis', () => {
   it('poradie kľúčov podľa SCHEMA.md', () => {
     const { plan } = pridajTemu(prazdnyPlan(), '2026-11-02', form('Advent', 'https://a.sk'))
     const t = JSON.parse(serializujPlan(plan)).tyzdne[0]
-    expect(Object.keys(t)).toEqual(['pondelok', 'temy', 'poznamka'])
-    expect(Object.keys(t.temy[0])).toEqual(['id', 'nazov', 'zdroje', 'poznamka', 'poradie', 'stav'])
+    expect(Object.keys(t)).toEqual(['pondelok', 'temy', 'poznamka', 'prilohy'])
+    expect(Object.keys(t.temy[0])).toEqual(['id', 'nazov', 'zdroje', 'poznamka', 'poradie', 'stav', 'prilohy'])
+  })
+})
+
+describe('PDF prílohy', () => {
+  const pdf = { nazov: 'dekan.pdf', cesta: 'Pastoracia-app/prilohy/2026-11-09/dekan.pdf', webUrl: 'https://x/dekan.pdf' }
+
+  it('k týždňu: týždeň len s PDF sa uloží, odobratím zmizne', () => {
+    const p = pridajPrilohuTyzdna(prazdnyPlan(), '2026-11-09', pdf)
+    expect(parsujPlan(serializujPlan(p)).tyzdne).toEqual([{ pondelok: '2026-11-09', temy: [], poznamka: '', prilohy: [pdf] }])
+    expect(pridajPrilohuTyzdna(p, '2026-11-09', pdf).tyzdne[0]!.prilohy).toHaveLength(1)
+    expect(odoberPrilohuTyzdna(p, '2026-11-09', pdf.cesta).tyzdne).toEqual([])
+  })
+
+  it('k téme cez formulár', () => {
+    const r = pridajTemu(prazdnyPlan(), '2026-11-09', { ...form('Advent'), prilohy: [pdf] })
+    expect(najdiTemu(r.plan, r.id)?.tema.prilohy).toEqual([pdf])
+    expect(temaNaFormular(najdiTemu(r.plan, r.id)!.tema).prilohy).toEqual([pdf])
+  })
+
+  it('chýbajúca cesta je chyba', () => {
+    const zly = JSON.stringify({ verzia: 1, tyzdne: [{ pondelok: '2026-11-09', temy: [], poznamka: 'x', prilohy: [{ nazov: 'a.pdf' }] }] })
+    expect(() => parsujPlan(zly)).toThrow(/cesta/)
   })
 })
 
@@ -107,6 +134,7 @@ describe('úpravy plánu', () => {
       poznamka: '',
       poradie: 2,
       stav: 'napad',
+      prilohy: [],
     })
     expect(() => pridajTemu(p, '2026-11-04', form('x'))).toThrow()
   })
@@ -114,7 +142,7 @@ describe('úpravy plánu', () => {
   it('formulár témy tam a späť', () => {
     const p = parsujPlan(PRIKLAD)
     const f = temaNaFormular(najdiTemu(p, 't-1')!.tema)
-    expect(f).toEqual({ nazov: 'Dušičky – odpustky', zdroje: 'https://example.org/odpustky', poznamka: 'krátko, 1 strana', stav: 'plan' })
+    expect(f).toEqual({ nazov: 'Dušičky – odpustky', zdroje: 'https://example.org/odpustky', poznamka: 'krátko, 1 strana', stav: 'plan', prilohy: [] })
     expect(serializujPlan(upravTemu(p, 't-1', f))).toBe(PRIKLAD)
     expect(validujTemu(form('  '))).toHaveLength(1)
   })
@@ -179,7 +207,7 @@ describe('úpravy plánu', () => {
     let p = zmazTemu(parsujPlan(PRIKLAD), 't-1')
     expect(p.tyzdne).toEqual([])
     p = nastavPoznamkuTyzdna(p, '2026-11-23', 'Krista Kráľa – bez listu?')
-    expect(p.tyzdne).toEqual([{ pondelok: '2026-11-23', temy: [], poznamka: 'Krista Kráľa – bez listu?' }])
+    expect(p.tyzdne).toEqual([{ pondelok: '2026-11-23', temy: [], poznamka: 'Krista Kráľa – bez listu?', prilohy: [] }])
   })
 
   it('8 týždňov dopredu vrátane prázdnych', () => {
@@ -198,6 +226,7 @@ describe('zdieľanie odkazu', () => {
       zdroje: 'https://tkkbs.sk/x',
       poznamka: '',
       stav: 'napad',
+      prilohy: [],
     })
   })
 

@@ -34,3 +34,41 @@ export function pouziTemu(t: Tema): void {
     else meta.content = meta.media.includes('dark') ? FARBA_TMAVA : FARBA_SVETLA
   }
 }
+
+// Hlavná farba (liturgické farby). Tiež len v tomto zariadení.
+
+export const FARBY = [
+  { id: 'bordova', nazov: 'Bordová', vzorka: '#7a1f2b' },
+  { id: 'zelena', nazov: 'Zelená', vzorka: '#2e6b3a' },
+  { id: 'fialova', nazov: 'Fialová', vzorka: '#5b2a86' },
+  { id: 'modra', nazov: 'Modrá', vzorka: '#1f4e8c' },
+  { id: 'zlata', nazov: 'Zlatá', vzorka: '#8a6100' },
+  { id: 'siva', nazov: 'Sivá', vzorka: '#4a4f57' },
+] as const
+
+export type Farba = (typeof FARBY)[number]['id']
+
+const KLUC_FARBA = 'pastoracia.farba'
+
+export function nacitajFarbu(): Farba {
+  try {
+    const f = localStorage.getItem(KLUC_FARBA)
+    return FARBY.find((x) => x.id === f)?.id ?? 'bordova'
+  } catch {
+    return 'bordova'
+  }
+}
+
+export function ulozFarbu(f: Farba): void {
+  try {
+    localStorage.setItem(KLUC_FARBA, f)
+  } catch {
+    // zablokované úložisko – farba platí aspoň do zatvorenia
+  }
+}
+
+export function pouziFarbu(f: Farba): void {
+  const koren = document.documentElement
+  if (f === 'bordova') delete koren.dataset.farba
+  else koren.dataset.farba = f
+}

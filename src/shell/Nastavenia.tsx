@@ -8,7 +8,7 @@ import { PLAN } from '../modules/farsky-list/data'
 import type { InfoPriecinka } from '../storage/graph'
 import { useSubor } from '../storage/useSubor'
 import { StavSynchronizacie } from '../ui/StavSynchronizacie'
-import { nacitajTemu, pouziTemu, ulozTemu, type Tema } from '../ui/tema'
+import { FARBY, nacitajFarbu, nacitajTemu, pouziFarbu, pouziTemu, ulozFarbu, ulozTemu, type Farba, type Tema } from '../ui/tema'
 
 const TEMY: Array<{ id: Tema; nazov: string }> = [
   { id: 'auto', nazov: 'Automaticky' },
@@ -34,6 +34,13 @@ export function Nastavenia() {
     nastavTemu(t)
   }
 
+  const [farba, nastavFarbu] = useState<Farba>(nacitajFarbu)
+  const zvolFarbu = (f: Farba) => {
+    ulozFarbu(f)
+    pouziFarbu(f)
+    nastavFarbu(f)
+  }
+
   const stavKalendara = useStavKalendara()
   const pripojKalendar = async () => {
     kalendar.zapni()
@@ -52,6 +59,14 @@ export function Nastavenia() {
         {TEMY.map((t) => (
           <button key={t.id} className="prepinac-tlacidlo" aria-pressed={tema === t.id} onClick={() => zvolTemu(t.id)}>
             {t.nazov}
+          </button>
+        ))}
+      </div>
+      <div className="farby" role="group" aria-label="Farba">
+        {FARBY.map((f) => (
+          <button key={f.id} className="farba" aria-pressed={farba === f.id} onClick={() => zvolFarbu(f.id)}>
+            <span className="farba-vzorka" style={{ background: f.vzorka }} aria-hidden="true" />
+            {f.nazov}
           </button>
         ))}
       </div>

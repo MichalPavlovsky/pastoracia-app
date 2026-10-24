@@ -4,7 +4,9 @@
 import type { Prihlasenie } from '../auth/prihlasenie'
 import { PamatovyKalendar } from '../calendar/pamatovy'
 import { SynchronizaciaKalendara } from '../calendar/synchronizacia'
+import { dnes } from '../lib/datum'
 import { serializujKnihy, SUBOR_KNIHY, type KnihySubor } from '../modules/knihy/model/knihy'
+import { serializujZamyslenia, SUBOR_ZAMYSLENIA } from '../modules/knihy/model/zamyslenia'
 import { PamatovaCache } from '../storage/cache'
 import { GraphOneDrive } from '../storage/graph'
 import { Uloziste } from '../storage/store'
@@ -74,9 +76,36 @@ export function jeUkazka(): boolean {
 }
 
 export function ukazkovaAplikacia(prihlasenie: Prihlasenie): Aplikacia {
-  const onedrive = new GraphOneDrive(() => Promise.reject(new Error('Ukážkový režim – bez OneDrive')))
+  // nahrávanie PDF predstiera úspech, ostatné volania OneDrive zlyhajú
+  const falosnyFetch: typeof fetch = async (vstup, init) => {
+    const url = String(vstup)
+    if (init?.method === 'PUT' && url.includes('/prilohy/')) {
+      const nazov = decodeURIComponent(url.split(':/content')[0]!.split('/').pop()!)
+      return Response.json({ name: nazov, webUrl: 'about:blank' })
+    }
+    if (init?.method === 'DELETE') return new Response(null, { status: 204 })
+    throw new Error('Ukážkový režim – bez OneDrive')
+  }
+  const onedrive = new GraphOneDrive(() => Promise.resolve('ukazka'), falosnyFetch)
   const falosny = new FalosnyOneDrive()
   falosny.zmenZvonku(SUBOR_KNIHY, serializujKnihy(UKAZKOVE_KNIHY))
+  falosny.zmenZvonku(
+    SUBOR_ZAMYSLENIA,
+    serializujZamyslenia({
+      verzia: 1,
+      dni: [
+        {
+          datum: dnes(),
+          nazov: 'Ukážkový deň',
+          citania: 'Kol 1, 12-18 · Jn 18, 33-37',
+          svati: 'Mučeníci Marcián a Martýrios',
+          myslienka: 'Ježiš je Kráľ, ktorý nevládne silou, ale pravdou. Jeho trónom je kríž a jeho mocou služba.',
+          otazka: 'Komu dnes v mojom živote patrí trón?',
+          zdroje: [{ nazov: 'casoslov.sk', url: 'https://casoslov.sk/' }],
+        },
+      ],
+    }),
+  )
   const uloziste = new Uloziste(falosny, new PamatovaCache())
   const kalendar = new SynchronizaciaKalendara(new PamatovyKalendar())
   return { prihlasenie, ucet: { meno: 'Ukážka', email: 'ukazka@localhost', typ: 'pracovny' }, onedrive, uloziste, kalendar }

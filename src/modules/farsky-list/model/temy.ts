@@ -15,6 +15,15 @@ export const NAZVY_STAVOV: Record<StavTemy, string> = {
   pouzite: 'Použité',
 }
 
+/** PDF v OneDrive; text z neho použije skill fl pri písaní listu. */
+export interface Priloha {
+  /** pôvodný názov súboru */
+  nazov: string
+  /** cesta od koreňa OneDrive, napr. "Pastoracia-app/prilohy/2026-11-02/dekan.pdf" */
+  cesta: string
+  webUrl: string
+}
+
 export interface Tema {
   id: string
   nazov: string
@@ -22,12 +31,14 @@ export interface Tema {
   poznamka: string
   poradie: number
   stav: StavTemy
+  prilohy: Priloha[]
 }
 
 export interface Tyzden {
   pondelok: string
   temy: Tema[]
   poznamka: string
+  prilohy: Priloha[]
 }
 
 export interface PlanSubor {
@@ -40,6 +51,17 @@ export function prazdnyPlan(): PlanSubor {
 }
 
 // ---------- čítanie a zápis súboru ----------
+
+function parsujPrilohy(v: unknown, c: string): Priloha[] {
+  return pole(v, c).map((x, i) => {
+    const o = obj(x, `${c}[${i}]`)
+    const cesta = text(o.cesta, `${c}[${i}].cesta`)
+    if (cesta === '') throw new ChybaFormatu(`${c}[${i}].cesta`, 'chýba cesta')
+    return { nazov: text(o.nazov, `${c}[${i}].nazov`), cesta, webUrl: text(o.webUrl, `${c}[${i}].webUrl`) }
+  })
+}
+
+const kopiaPriloh = (p: Priloha[]): Priloha[] => p.map((x) => ({ nazov: x.nazov, cesta: x.cesta, webUrl: x.webUrl }))
 
 export function parsujPlan(s: string): PlanSubor {
   const koren = obj(parsujText(s, SUBOR_PLAN), SUBOR_PLAN)
@@ -66,9 +88,11 @@ export function parsujPlan(s: string): PlanSubor {
           poznamka: text(to.poznamka, `${ct}.poznamka`),
           poradie: to.poradie === undefined ? j + 1 : cislo(to.poradie, `${ct}.poradie`),
           stav: jedenZ(to.stav, STAVY_TEMY, `${ct}.stav`),
+          prilohy: parsujPrilohy(to.prilohy, `${ct}.prilohy`),
         }
       }),
       poznamka: text(o.poznamka, `${c}.poznamka`),
+      prilohy: parsujPrilohy(o.prilohy, `${c}.prilohy`),
     }
   })
   return normalizujPlan({ verzia: 1, tyzdne })
@@ -94,10 +118,12 @@ export function normalizujPlan(plan: PlanSubor): PlanSubor {
             poznamka: tm.poznamka,
             poradie: i + 1,
             stav: tm.stav,
+            prilohy: kopiaPriloh(tm.prilohy),
           })),
         poznamka: t.poznamka,
+        prilohy: kopiaPriloh(t.prilohy),
       }))
-      .filter((t) => t.temy.length > 0 || t.poznamka.trim() !== '')
+      .filter((t) => t.temy.length > 0 || t.poznamka.trim() !== '' || t.prilohy.length > 0)
       .sort((a, b) => a.pondelok.localeCompare(b.pondelok)),
   }
 }
@@ -105,7 +131,7 @@ export function normalizujPlan(plan: PlanSubor): PlanSubor {
 // ---------- úpravy plánu ----------
 
 export function najdiTyzden(plan: PlanSubor, pondelok: string): Tyzden {
-  return plan.tyzdne.find((t) => t.pondelok === pondelok) ?? { pondelok, temy: [], poznamka: '' }
+  return plan.tyzdne.find((t) => t.pondelok === pondelok) ?? { pondelok, temy: [], poznamka: '', prilohy: [] }
 }
 
 function nahradTyzden(plan: PlanSubor, t: Tyzden): PlanSubor {
@@ -130,10 +156,17 @@ export interface TemaForm {
   zdroje: string
   poznamka: string
   stav: StavTemy
+  prilohy: Priloha[]
 }
 
 export function temaNaFormular(t?: Tema): TemaForm {
-  return { nazov: t?.nazov ?? '', zdroje: (t?.zdroje ?? []).join('\n'), poznamka: t?.poznamka ?? '', stav: t?.stav ?? 'napad' }
+  return {
+    nazov: t?.nazov ?? '',
+    zdroje: (t?.zdroje ?? []).join('\n'),
+    poznamka: t?.poznamka ?? '',
+    stav: t?.stav ?? 'napad',
+    prilohy: t?.prilohy ?? [],
+  }
 }
 
 export function validujTemu(f: TemaForm): string[] {
@@ -156,6 +189,7 @@ export function pridajTemu(plan: PlanSubor, pondelok: string, f: TemaForm): { pl
     poznamka: f.poznamka,
     poradie: t.temy.length + 1,
     stav: f.stav,
+    prilohy: f.prilohy,
   }
   return { plan: nahradTyzden(plan, { ...t, temy: [...t.temy, tema] }), id }
 }
@@ -163,7 +197,7 @@ export function pridajTemu(plan: PlanSubor, pondelok: string, f: TemaForm): { pl
 export function upravTemu(plan: PlanSubor, id: string, f: TemaForm): PlanSubor {
   const n = najdiTemu(plan, id)
   if (!n) return plan
-  const tema = { ...n.tema, nazov: f.nazov.trim(), zdroje: zdrojeZTextu(f.zdroje), poznamka: f.poznamka, stav: f.stav }
+  const tema = { ...n.tema, nazov: f.nazov.trim(), zdroje: zdrojeZTextu(f.zdroje), poznamka: f.poznamka, stav: f.stav, prilohy: f.prilohy }
   return nahradTyzden(plan, { ...n.tyzden, temy: n.tyzden.temy.map((t) => (t.id === id ? tema : t)) })
 }
 
@@ -218,6 +252,16 @@ export function prepniStav(plan: PlanSubor, id: string): PlanSubor {
   })
 }
 
+export function pridajPrilohuTyzdna(plan: PlanSubor, pondelok: string, p: Priloha): PlanSubor {
+  const t = najdiTyzden(plan, pondelok)
+  return nahradTyzden(plan, { ...t, prilohy: [...t.prilohy.filter((x) => x.cesta !== p.cesta), p] })
+}
+
+export function odoberPrilohuTyzdna(plan: PlanSubor, pondelok: string, cesta: string): PlanSubor {
+  const t = najdiTyzden(plan, pondelok)
+  return nahradTyzden(plan, { ...t, prilohy: t.prilohy.filter((x) => x.cesta !== cesta) })
+}
+
 export function nastavPoznamkuTyzdna(plan: PlanSubor, pondelok: string, poznamka: string): PlanSubor {
   return nahradTyzden(plan, { ...najdiTyzden(plan, pondelok), poznamka })
 }
@@ -242,5 +286,6 @@ export function temaZoZdielania(p: { title?: string; text?: string; url?: string
     zdroje: odkaz,
     poznamka: nazov === zvysok ? '' : zvysok,
     stav: 'napad',
+    prilohy: [],
   }
 }

@@ -6,6 +6,8 @@ import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-ki
 import {
   najdiTyzden,
   nastavPoznamkuTyzdna,
+  odoberPrilohuTyzdna,
+  pridajPrilohuTyzdna,
   prepniStav,
   presunTemu,
   zmazTemu,
@@ -16,6 +18,7 @@ import {
 } from '../model/temy'
 import { popisTyzdna } from './popis'
 import { PolozkaTemy } from './PolozkaTemy'
+import { PrilohyPdf } from './PrilohyPdf'
 import './temy.css'
 
 /** id cieľovej plochy týždňa pri ťahaní (témy majú id „t-…“) */
@@ -36,8 +39,9 @@ interface Props {
 }
 
 export function Tyzden({ tyzden, stitok, ciel, tyzdne, uloz, onNovaTema, onUprav }: Props) {
-  const { pondelok, temy, poznamka } = tyzden
+  const { pondelok, temy, poznamka, prilohy } = tyzden
   const [poznamkaOtvorena, setPoznamkaOtvorena] = useState(false)
+  const [pdfOtvorene, setPdfOtvorene] = useState(false)
   const ineTyzdne = tyzdne.filter((t) => t !== pondelok)
   const { setNodeRef } = useDroppable({ id: PREDPONA_TYZDNA + pondelok })
 
@@ -115,6 +119,37 @@ export function Tyzden({ tyzden, stitok, ciel, tyzdne, uloz, onNovaTema, onUprav
           />
         ) : (
           poznamka.trim() !== '' && <p className="tm-poznamka">{poznamka}</p>
+        )}
+      </div>
+
+      <div className="tm-poznamka-tyzdna">
+        <button
+          type="button"
+          className="tm-rozbal"
+          aria-expanded={pdfOtvorene}
+          onClick={() => setPdfOtvorene((v) => !v)}
+        >
+          {pdfOtvorene ? '▾' : '▸'} PDF k týždňu ({prilohy.length})
+        </button>
+        {pdfOtvorene ? (
+          <PrilohyPdf
+            prilohy={prilohy}
+            priecinok={pondelok}
+            onPridaj={(pr) => uloz((p) => pridajPrilohuTyzdna(p, pondelok, pr))}
+            onOdober={(pr) => uloz((p) => odoberPrilohuTyzdna(p, pondelok, pr.cesta))}
+          />
+        ) : (
+          prilohy.length > 0 && (
+            <ul className="tm-prilohy-nahlad">
+              {prilohy.map((pr) => (
+                <li key={pr.cesta}>
+                  <a href={pr.webUrl} target="_blank" rel="noopener">
+                    📄 {pr.nazov}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
         )}
       </div>
     </section>

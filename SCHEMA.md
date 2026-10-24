@@ -68,10 +68,18 @@ Vlastné návrhy tém na Farský list.
           "zdroje": ["https://..."],
           "poznamka": "krátko, 1 strana",
           "poradie": 1,
-          "stav": "plan"
+          "stav": "plan",
+          "prilohy": [
+            {
+              "nazov": "odpustky.pdf",
+              "cesta": "Pastoracia-app/prilohy/2026-11-02/odpustky.pdf",
+              "webUrl": "https://..."
+            }
+          ]
         }
       ],
-      "poznamka": ""
+      "poznamka": "",
+      "prilohy": []
     }
   ]
 }
@@ -87,7 +95,11 @@ Vlastné návrhy tém na Farský list.
 
 - Pole `tyzdne` je zoradené podľa `pondelok` vzostupne, každý pondelok je v ňom najviac raz.
 - Témy v týždni sú zoradené podľa `poradie`.
-- Týždeň bez tém aj bez poznámky sa neukladá.
+- `prilohy`: PDF k téme (pri téme) alebo k celému týždňu (pri týždni), inak `[]`. `nazov` = pôvodný názov súboru,
+  `cesta` = od koreňa OneDrive, `webUrl` = odkaz na otvorenie. Aplikácia ich nahráva do `/Pastoracia-app/prilohy/<pondelok>/`
+  (rovnaký názov OneDrive premenuje). Skill `fl` z nich pri písaní listu vytiahne text
+  (na PC: `C:\Users\MIchalPC\OneDrive - Greckokatolicke arcibiskupstvo Presov\` + `cesta`).
+- Týždeň bez tém, bez poznámky a bez príloh sa neukladá.
 
 ## pastoracia-myslienky.json
 
@@ -223,3 +235,31 @@ Poradie v `knihy` = poradie čítania (číta sa jedna kniha od začiatku do kon
 - Keď má neprečítané úryvky už len jedna kniha, aplikácia ukáže „Treba načítať nové knihy“ (Claude sa opýta
   a spracuje ďalšie dve z rebríčka). Aktívne sú vždy 3 knihy.
 - Zlúčenie: zjednotenie oboch zoznamov (podľa `uryvok`, resp. id), pri `oblubene` sa rešpektuje odobratie.
+
+## zamyslenia-web.json
+
+Čítania dňa a krátka myšlienka z webu (karta „Dnes v liturgii“ v Knihách). **Zapisuje ho len Claude** (raz týždenne,
+postup vo vaulte `AIOS/Skills/zamyslenia-web.md`), aplikácia ho iba číta. Ak súbor chýba, karta sa neukáže.
+
+```json
+{
+  "verzia": 1,
+  "dni": [
+    {
+      "datum": "2026-10-25",
+      "nazov": "Nedeľa Krista Kráľa",
+      "citania": "Kol 1, 12-18 · Jn 18, 33-37",
+      "svati": "Mučeníci Marcián a Martýrios",
+      "myslienka": "Vlastnými slovami, 2–4 vety.",
+      "otazka": "Jedna otázka na zamyslenie.",
+      "zdroje": [
+        { "nazov": "casoslov.sk", "url": "https://casoslov.sk/?day=2026-10-25" }
+      ]
+    }
+  ]
+}
+```
+
+- `dni` zoradené podľa `datum`, každý dátum najviac raz; v súbore je posledný týždeň dozadu a 7–14 dní dopredu.
+- `myslienka` a `otazka` píše Claude **vlastnými slovami** podľa zdrojov (cudzie texty sa nekopírujú, na celý text je odkaz v `zdroje`).
+- Čítania sú podľa gréckokatolíckeho (byzantského) poriadku z casoslov.sk.

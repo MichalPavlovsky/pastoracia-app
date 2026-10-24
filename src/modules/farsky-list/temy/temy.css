@@ -261,3 +261,50 @@ textarea.tm-vstup {
   width: 100%;
   margin-bottom: 16px;
 }
+
+.tm-prilohy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.tm-prilohy-zoznam {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tm-priloha {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.tm-priloha-nazov {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.tm-prilohy .tm-pomoc {
+  display: block;
+}
+
+.tm-prilohy-nahlad {
+  margin: 4px 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.tm-pocet-pdf {
+  margin-left: 8px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-slabsi);
+}

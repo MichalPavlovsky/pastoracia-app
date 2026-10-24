@@ -4,6 +4,7 @@ import { ChybaPrihlasenia, ChybaSiete, KonfliktZapisu, type VzdialenySubor, type
 
 export const GRAPH = 'https://graph.microsoft.com/v1.0'
 export const PRIECINOK = 'Pastoracia-app/data'
+export const PRIECINOK_PRILOHY = 'Pastoracia-app/prilohy'
 const LIMIT_MS = 20_000
 
 /** Vráti prístupový token; `obnov` = vynútiť nový (po 401). */
@@ -30,21 +31,21 @@ export class GraphOneDrive implements VzdialeneUloziste {
     return `${GRAPH}/me/drive/root:/${PRIECINOK}/${encodeURIComponent(nazov)}${pripona}`
   }
 
-  private async poziadavka(url: string, init: RequestInit = {}, opakovanie = false): Promise<Response> {
+  private async poziadavka(url: string, init: RequestInit = {}, opakovanie = false, limit = LIMIT_MS): Promise<Response> {
     const token = await this.ziskajToken(opakovanie)
     let res: Response
     try {
       res = await this.fetchFn(url, {
         ...init,
         cache: 'no-store',
-        signal: AbortSignal.timeout(LIMIT_MS),
+        signal: AbortSignal.timeout(limit),
         headers: { ...(init.headers as Record<string, string>), Authorization: `Bearer ${token}` },
       })
     } catch {
       throw new ChybaSiete()
     }
     if (res.status === 401) {
-      if (!opakovanie) return this.poziadavka(url, init, true)
+      if (!opakovanie) return this.poziadavka(url, init, true, limit)
       throw new ChybaPrihlasenia()
     }
     if (res.status === 429 || res.status >= 500) throw new ChybaSiete(`OneDrive dočasne neodpovedá (${res.status})`)
@@ -86,6 +87,31 @@ export class GraphOneDrive implements VzdialeneUloziste {
     if (res.status === 412 || res.status === 409) throw new KonfliktZapisu(nazov)
     await overOk(res)
     return ((await res.json()) as { eTag: string }).eTag
+  }
+
+  /**
+   * Nahrá PDF do /Pastoracia-app/prilohy/<priecinok>/. Rovnaký názov OneDrive premenuje („a 1.pdf“).
+   * Jednoduché nahranie zvládne do 250 MB.
+   */
+  async nahrajPrilohu(priecinok: string, subor: File): Promise<{ nazov: string; cesta: string; webUrl: string }> {
+    const nazov = subor.name.replace(/[\\/:*?"<>|#%]/g, '_') || 'priloha.pdf'
+    const cesta = `${PRIECINOK_PRILOHY}/${priecinok}/${nazov}`
+    const url = `${GRAPH}/me/drive/root:/${cesta.split('/').map(encodeURIComponent).join('/')}:/content?@microsoft.graph.conflictBehavior=rename`
+    const res = await this.poziadavka(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': subor.type || 'application/pdf' },
+      body: subor,
+    }, false, 120_000)
+    await overOk(res)
+    const j = (await res.json()) as { name: string; webUrl: string }
+    return { nazov: subor.name, cesta: `${PRIECINOK_PRILOHY}/${priecinok}/${j.name}`, webUrl: j.webUrl }
+  }
+
+  /** Zmaže prílohu (v OneDrive ide do koša). Neexistujúca nevadí. */
+  async zmazPrilohu(cesta: string): Promise<void> {
+    const res = await this.poziadavka(`${GRAPH}/me/drive/root:/${cesta.split('/').map(encodeURIComponent).join('/')}`, { method: 'DELETE' })
+    if (res.status === 404) return
+    await overOk(res)
   }
 
   /** Pre Nastavenia: kam je aplikácia pripojená. */

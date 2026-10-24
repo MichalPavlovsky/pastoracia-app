@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { NAZVY_STAVOV, STAVY_TEMY, validujTemu, type TemaForm } from '../model/temy'
+import { PrilohyPdf } from './PrilohyPdf'
 import { VyberTyzdna } from './VyberTyzdna'
 import './temy.css'
 
@@ -85,6 +86,16 @@ export function FormularTemy({ nadpis, pociatok, pondelok, tyzdne, napoveda, zao
           onChange={(e) => setForm((f) => ({ ...f, poznamka: e.target.value }))}
         />
       </label>
+
+      <div className="tm-pole">
+        <span className="tm-popis">PDF</span>
+        <PrilohyPdf
+          prilohy={form.prilohy}
+          priecinok={tyzden ?? pondelok}
+          onPridaj={(p) => setForm((f) => ({ ...f, prilohy: [...f.prilohy.filter((x) => x.cesta !== p.cesta), p] }))}
+          onOdober={(p) => setForm((f) => ({ ...f, prilohy: f.prilohy.filter((x) => x.cesta !== p.cesta) }))}
+        />
+      </div>
 
       <div className="tm-pole">
         <span className="tm-popis">Stav</span>

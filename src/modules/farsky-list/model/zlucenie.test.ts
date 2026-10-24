@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { nastavPoznamkuTyzdna, parsujPlan, presunTemu, prepniStav, zmazTemu } from './temy'
+import { nastavPoznamkuTyzdna, parsujPlan, prazdnyPlan, presunTemu, prepniStav, pridajPrilohuTyzdna, zmazTemu } from './temy'
 import { zlucPlan } from './zlucenie'
 
 describe('zlúčenie plánu tém', () => {
@@ -42,9 +42,20 @@ describe('zlúčenie plánu tém', () => {
     const ich = zmazTemu(zaklad, 't-2')
     const v = zlucPlan(zaklad, moje, ich)
     expect(v.data.tyzdne).toEqual([
-      { pondelok: '2026-11-02', temy: [{ id: 't-1', nazov: 'Dušičky', zdroje: [], poznamka: '', poradie: 1, stav: 'napad' }], poznamka: '' },
-      { pondelok: '2026-11-09', temy: [], poznamka: 'bez listu' },
+      { pondelok: '2026-11-02', temy: [{ id: 't-1', nazov: 'Dušičky', zdroje: [], poznamka: '', poradie: 1, stav: 'napad', prilohy: [] }], poznamka: '', prilohy: [] },
+      { pondelok: '2026-11-09', temy: [], poznamka: 'bez listu', prilohy: [] },
     ])
     expect(v.zmenyZInych).toEqual(['Téma „Martin“ zmazaná'])
+  })
+})
+
+describe('zlúčenie PDF k týždňu', () => {
+  const a = { nazov: 'a.pdf', cesta: 'Pastoracia-app/prilohy/2026-11-09/a.pdf', webUrl: '' }
+  const b = { nazov: 'b.pdf', cesta: 'Pastoracia-app/prilohy/2026-11-09/b.pdf', webUrl: '' }
+
+  it('pridané na oboch zariadeniach sa spojí', () => {
+    const v = zlucPlan(prazdnyPlan(), pridajPrilohuTyzdna(prazdnyPlan(), '2026-11-09', a), pridajPrilohuTyzdna(prazdnyPlan(), '2026-11-09', b))
+    expect(v.data.tyzdne[0]!.prilohy.map((p) => p.nazov)).toEqual(['a.pdf', 'b.pdf'])
+    expect(v.zmenyZInych).toEqual([expect.stringMatching(/^PDF k týždňu .*9. 11. 2026: pridané$/)])
   })
 })
