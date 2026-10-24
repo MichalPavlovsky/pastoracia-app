@@ -85,3 +85,11 @@ export function minutyNaCas(min: number): string {
 export function posunCas(cas: string, minuty: number): string {
   return minutyNaCas(casNaMinuty(cas) + minuty)
 }
+
+const SKRATKY_DNI = ['po', 'ut', 'st', 'št', 'pi', 'so', 'ne']
+
+/** "st 23. 12. 2026" */
+export function formatDatum(datum: string): string {
+  const [r, m, d] = datum.split('-').map(Number)
+  return `${SKRATKY_DNI[denVTyzdni(datum)]} ${d}. ${m}. ${r}`
+}
