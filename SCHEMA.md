@@ -172,6 +172,54 @@ Komu sa ozvať (dlaždica Ľudia).
   v čase zápisu). Aplikácia porovná udalosti s pripomienkami a chýbajúce vytvorí, zmenené upraví, nepotrebné
   (hotové, zmazané) zmaže. Pravidelný kontakt do kalendára nejde.
 
-## Ďalšie moduly
+## knihy.json
 
-Knihy má zatiaľ len TypeScript typy (`src/modules/knihy/types.ts`). Súbor sa doplní sem, keď sa bude tvoriť.
+Úryvky na zamyslenie dňa. **Zapisuje ho len Claude** (spracovanie kníh na PC), aplikácia ho iba číta.
+Poradie v `knihy` = poradie čítania (číta sa jedna kniha od začiatku do konca). Rebríček kníh je vo vaulte
+(`10 Projekty/Knihy – rebríček.md`).
+
+```json
+{
+  "verzia": 1,
+  "knihy": [
+    {
+      "id": "milovat-a-ctit",
+      "nazov": "Milovať a ctiť",
+      "autor": "Richard Vašečka",
+      "zdroj": "Knihy/milovat-a-ctit.pdf",
+      "uryvky": [
+        {
+          "id": "milovat-a-ctit-001",
+          "nadpis": "Podstata manželstva",
+          "miesto": "s. 4",
+          "text": "Prvý odsek.\n\nDruhý odsek."
+        }
+      ]
+    }
+  ]
+}
+```
+
+- `id` knihy: malé písmená bez diakritiky a pomlčky. `id` úryvku: `<id knihy>-NNN` (trojmiestne, od 001), nikdy sa nemení.
+- `zdroj`: cesta od koreňa OneDrive. `miesto`: strana alebo kapitola v origináli (môže byť `""`).
+- `text`: v jazyku knihy (české knihy ostávajú po česky, neprekladajú sa), ~2 minúty čítania (asi 220–320 slov), odseky oddelené `\n\n`.
+- Dočítané knihy Claude pri načítaní nových odstráni; ich `id` úryvkov ostávajú v `knihy-stav.json`.
+
+## knihy-stav.json
+
+Čo už Michal prečítal. Zapisuje aplikácia.
+
+```json
+{
+  "verzia": 1,
+  "precitane": [
+    { "uryvok": "milovat-a-ctit-001", "datum": "2026-10-25" }
+  ],
+  "oblubene": ["milovat-a-ctit-001"]
+}
+```
+
+- Dnešný úryvok = úryvok prečítaný dnes, inak prvý neprečítaný v poradí `knihy.json`.
+- Keď má neprečítané úryvky už len jedna kniha, aplikácia ukáže „Treba načítať nové knihy“ (Claude sa opýta
+  a spracuje ďalšie dve z rebríčka). Aktívne sú vždy 3 knihy.
+- Zlúčenie: zjednotenie oboch zoznamov (podľa `uryvok`, resp. id), pri `oblubene` sa rešpektuje odobratie.
