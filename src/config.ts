@@ -9,7 +9,7 @@ export const config = {
     .split(',')
     .map((a: string) => a.trim().toLowerCase())
     .filter((a: string) => a !== ''),
-  /** napr. http://localhost:5173/ alebo https://michalpavlovsky.github.io/pastoracia-app/ */
+  /** napr. http://localhost:5174/ alebo https://michalpavlovsky.github.io/pastoracia-app/ */
   adresaAplikacie: new URL(import.meta.env.BASE_URL, window.location.origin).href,
 }
 

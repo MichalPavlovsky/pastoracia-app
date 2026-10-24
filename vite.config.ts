@@ -8,8 +8,8 @@ const base = process.env.GITHUB_PAGES ? '/pastoracia-app/' : '/'
 
 export default defineConfig({
   base,
-  // port musí sedieť s redirect URI v Azure (http://localhost:5173/)
-  server: { port: 5173, strictPort: true },
+  // port musí sedieť s redirect URI v Azure (http://localhost:5174/); 5173 používa aplikácia Prípravy
+  server: { port: 5174, strictPort: true },
   plugins: [
     react(),
     VitePWA({
