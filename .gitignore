@@ -1,0 +1,17 @@
+node_modules/
+dist/
+dev-dist/
+coverage/
+*.tsbuildinfo
+
+# tajomstvá a lokálne nastavenia
+.env
+.env.local
+.env.*.local
+
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.log
