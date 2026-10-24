@@ -16,6 +16,22 @@ const PRIKLAD = `{
           "nazov": "casoslov.sk",
           "url": "https://casoslov.sk/?day=2026-10-25"
         }
+      ],
+      "texty": [
+        {
+          "nazov": "Evanjelium",
+          "odkaz": "Jn 18, 33-37",
+          "url": "https://casoslov.sk/?page=pray&day=2026-10-25&id=1"
+        }
+      ],
+      "dalsie": [
+        {
+          "druh": "otcovia",
+          "nazov": "Otcovia k evanjeliu",
+          "zdroj": "Catena Aurea",
+          "text": "Vlastnými slovami.",
+          "url": "https://catenaaurea.sk/CommentedBibleTextsDirect.php?volba=Jn%2018,33"
+        }
       ]
     }
   ]
@@ -30,9 +46,13 @@ describe('zamyslenia-web.json', () => {
   it('doplní chýbajúce polia a zoradí podľa dátumu', () => {
     const d = parsujZamyslenia('{"verzia":1,"dni":[{"datum":"2026-10-27"},{"datum":"2026-10-26","myslienka":"x"}]}')
     expect(d.dni.map((x) => x.datum)).toEqual(['2026-10-26', '2026-10-27'])
-    expect(d.dni[1]).toEqual({ datum: '2026-10-27', nazov: '', citania: '', svati: '', myslienka: '', otazka: '', zdroje: [] })
+    expect(d.dni[1]).toEqual({ datum: '2026-10-27', nazov: '', citania: '', svati: '', myslienka: '', otazka: '', zdroje: [], texty: [], dalsie: [] })
     expect(pripraveneDo(d)).toBe('2026-10-27')
     expect(pripraveneDo(prazdneZamyslenia())).toBeNull()
+  })
+
+  it('neznámy druh ďalšieho zamyslenia je chyba', () => {
+    expect(() => parsujZamyslenia('{"verzia":1,"dni":[{"datum":"2026-10-25","dalsie":[{"druh":"x"}]}]}')).toThrow(/druh/)
   })
 
   it('chybný alebo zdvojený dátum je chyba', () => {

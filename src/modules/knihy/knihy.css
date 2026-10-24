@@ -160,3 +160,49 @@
 .knihy-zalozky {
   margin: 0 0 16px;
 }
+
+.knihy-web-rozbal {
+  margin: 0.5rem 0;
+  border-top: 1px solid var(--okraj);
+}
+
+.knihy-web-rozbal > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 4px;
+  min-height: 48px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.knihy-web-rozbal > p {
+  margin: 0 0 0.75rem;
+  line-height: 1.6;
+}
+
+.knihy-web-ramec {
+  display: block;
+  width: 100%;
+  height: 70vh;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: #fff;
+}
+
+.knihy-web-odkaz {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+.knihy-web-dalsie {
+  max-width: 38rem;
+  margin: 0 0 1.5rem;
+}
+
+.knihy-web-dalsie .knihy-web-rozbal {
+  padding: 0 16px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+}

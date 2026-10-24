@@ -102,6 +102,19 @@ export function ukazkovaAplikacia(prihlasenie: Prihlasenie): Aplikacia {
           myslienka: 'Ježiš je Kráľ, ktorý nevládne silou, ale pravdou. Jeho trónom je kríž a jeho mocou služba.',
           otazka: 'Komu dnes v mojom živote patrí trón?',
           zdroje: [{ nazov: 'casoslov.sk', url: 'https://casoslov.sk/' }],
+          texty: [
+            { nazov: 'Evanjelium', odkaz: 'Lk 7, 1b-10', url: 'https://casoslov.sk/?page=pray&day=2026-10-24&id=99999236' },
+          ],
+          dalsie: [
+            {
+              druh: 'otcovia',
+              nazov: 'Otcovia k evanjeliu',
+              zdroj: 'Catena Aurea',
+              text: 'Ukážková myšlienka Otcov vlastnými slovami.',
+              url: 'https://catenaaurea.sk/CommentedBibleTextsDirect.php?volba=Lk%207,1',
+            },
+            { druh: 'komentar', nazov: 'Komentár k evanjeliu', zdroj: 'Opus Dei', text: 'Ukážkový komentár.', url: 'https://opusdei.org/sk-sk/gospel/' },
+          ],
         },
       ],
     }),

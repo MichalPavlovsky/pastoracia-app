@@ -2,13 +2,36 @@
 // Formát je popísaný v SCHEMA.md a musí sa dodržať presne.
 
 import { jeDatum } from '../../../lib/datum'
-import { ChybaFormatu, naText, obj, overVerziu, parsujText, pole, text } from '../../../lib/json'
+import { ChybaFormatu, jedenZ, naText, obj, overVerziu, parsujText, pole, text } from '../../../lib/json'
 import type { VysledokZlucenia } from '../../../storage/types'
 
 export const SUBOR_ZAMYSLENIA = 'zamyslenia-web.json'
 
 export interface Zdroj {
   nazov: string
+  url: string
+}
+
+/** Čítanie, ktoré sa dá v aplikácii rozkliknúť (stránka casoslov.sk s textom). */
+export interface TextCitania {
+  /** napr. „Evanjelium“ */
+  nazov: string
+  /** napr. „Lk 7, 1b-10“ */
+  odkaz: string
+  url: string
+}
+
+export const DRUHY_DALSIEHO = ['otcovia', 'komentar', 'nedela'] as const
+export type DruhDalsieho = (typeof DRUHY_DALSIEHO)[number]
+
+/** Ďalšie čítanie na deň – text vlastnými slovami, celý originál je na `url`. */
+export interface DalsieZamyslenie {
+  druh: DruhDalsieho
+  /** napr. „Otcovia k evanjeliu“ */
+  nazov: string
+  /** napr. „Catena Aurea“ */
+  zdroj: string
+  text: string
   url: string
 }
 
@@ -23,6 +46,8 @@ export interface ZamyslenieDna {
   myslienka: string
   otazka: string
   zdroje: Zdroj[]
+  texty: TextCitania[]
+  dalsie: DalsieZamyslenie[]
 }
 
 export interface ZamysleniaSubor {
@@ -55,6 +80,22 @@ export function parsujZamyslenia(s: string): ZamysleniaSubor {
       zdroje: pole(o.zdroje, `${c}.zdroje`).map((z, k) => {
         const oz = obj(z, `${c}.zdroje[${k}]`)
         return { nazov: text(oz.nazov, `${c}.zdroje[${k}].nazov`), url: text(oz.url, `${c}.zdroje[${k}].url`) }
+      }),
+      texty: pole(o.texty, `${c}.texty`).map((t, k) => {
+        const p = `${c}.texty[${k}]`
+        const ot = obj(t, p)
+        return { nazov: text(ot.nazov, `${p}.nazov`), odkaz: text(ot.odkaz, `${p}.odkaz`), url: text(ot.url, `${p}.url`) }
+      }),
+      dalsie: pole(o.dalsie, `${c}.dalsie`).map((x, k) => {
+        const p = `${c}.dalsie[${k}]`
+        const ox = obj(x, p)
+        return {
+          druh: jedenZ(ox.druh, DRUHY_DALSIEHO, `${p}.druh`),
+          nazov: text(ox.nazov, `${p}.nazov`),
+          zdroj: text(ox.zdroj, `${p}.zdroj`),
+          text: text(ox.text, `${p}.text`),
+          url: text(ox.url, `${p}.url`),
+        }
       }),
     }
   })

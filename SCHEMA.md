@@ -254,12 +254,26 @@ postup vo vaulte `AIOS/Skills/zamyslenia-web.md`), aplikácia ho iba číta. Ak 
       "otazka": "Jedna otázka na zamyslenie.",
       "zdroje": [
         { "nazov": "casoslov.sk", "url": "https://casoslov.sk/?day=2026-10-25" }
+      ],
+      "texty": [
+        { "nazov": "Evanjelium", "odkaz": "Jn 18, 33-37", "url": "https://casoslov.sk/?page=pray&day=2026-10-25&id=…" }
+      ],
+      "dalsie": [
+        {
+          "druh": "otcovia",
+          "nazov": "Otcovia k evanjeliu",
+          "zdroj": "Catena Aurea",
+          "text": "Vlastnými slovami, 3–6 viet; odseky oddelené prázdnym riadkom.",
+          "url": "https://catenaaurea.sk/CommentedBibleTextsDirect.php?volba=Jn%2018,33"
+        }
       ]
     }
   ]
 }
 ```
 
-- `dni` zoradené podľa `datum`, každý dátum najviac raz; v súbore je posledný týždeň dozadu a 7–14 dní dopredu.
+- `dni` zoradené podľa `datum`, každý dátum najviac raz; v súbore je posledný týždeň dozadu a 14 dní dopredu.
 - `myslienka` a `otazka` píše Claude **vlastnými slovami** podľa zdrojov (cudzie texty sa nekopírujú, na celý text je odkaz v `zdroje`).
 - Čítania sú podľa gréckokatolíckeho (byzantského) poriadku z casoslov.sk.
+- `texty` (voliteľné): čítania na rozkliknutie – aplikácia stránku `url` zobrazí v rámčeku (casoslov.sk, stránka `?page=pray&day=…&id=…` s textom čítania). Text sa do súboru nekopíruje.
+- `dalsie` (voliteľné): `druh` je `"otcovia"` (catenaaurea.sk), `"komentar"` (opusdei.org – rímske poradie, smie sa líšiť od byzantského evanjelia) alebo `"nedela"` (inky.sk – materiály k nedeľným evanjeliám, katechézy). `text` vlastnými slovami, `url` na celý originál.
