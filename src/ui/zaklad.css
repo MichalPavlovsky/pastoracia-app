@@ -1,0 +1,178 @@
+/* Základný vzhľad – mobile first, veľké dotykové prvky, svetlý aj tmavý režim.
+   Plný dizajn domovskej obrazovky príde v kroku 6. */
+
+:root {
+  --pozadie: #faf8f5;
+  --plocha: #ffffff;
+  --text: #1f1b18;
+  --text-slabsi: #6b625b;
+  --okraj: #e2dcd5;
+  --hlavna: #7a1f2b;
+  --hlavna-text: #ffffff;
+  --ok: #2e7d4f;
+  --varovanie: #b26a00;
+  --chyba: #b3261e;
+  --zaoblenie: 12px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --pozadie: #171412;
+    --plocha: #221e1b;
+    --text: #f1ece7;
+    --text-slabsi: #a99f97;
+    --okraj: #3a3430;
+    --hlavna: #d9727f;
+    --hlavna-text: #1a0d0f;
+    --ok: #6cc28f;
+    --varovanie: #f0a94a;
+    --chyba: #f2857c;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--pozadie);
+  color: var(--text);
+  font: 17px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  color: var(--hlavna);
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin: 0 0 1rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin: 2rem 0 0.5rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin: 1.25rem 0 0.25rem;
+}
+
+.uvod,
+.aplikacia {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+}
+
+.uvod {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.tlacidlo {
+  min-height: 48px;
+  padding: 0 1.1rem;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.tlacidlo-hlavne {
+  background: var(--hlavna);
+  border-color: var(--hlavna);
+  color: var(--hlavna-text);
+  font-weight: 600;
+}
+
+.tlacidlo-velke {
+  min-height: 60px;
+  font-size: 1.1rem;
+}
+
+.tlacidlo-nebezpecne {
+  color: var(--chyba);
+  border-color: var(--chyba);
+}
+
+.rad-tlacidiel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.udaje {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0;
+}
+
+.udaje dt {
+  color: var(--text-slabsi);
+}
+
+.udaje dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.chyba {
+  color: var(--chyba);
+}
+
+.stav-sync p {
+  margin: 0.25rem 0;
+}
+
+.stav-bodka {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-slabsi);
+}
+
+[data-stav='synchronizovane'] .stav-bodka {
+  background: var(--ok);
+}
+
+[data-stav='caka'] .stav-bodka,
+[data-stav='offline'] .stav-bodka,
+[data-stav='konflikt'] .stav-bodka {
+  background: var(--varovanie);
+}
+
+[data-stav='chyba'] .stav-bodka {
+  background: var(--chyba);
+}
+
+.oznam {
+  margin: 0.75rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+}
+
+.oznam-varovanie {
+  border-color: var(--varovanie);
+}
+
+.oznam ul {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}

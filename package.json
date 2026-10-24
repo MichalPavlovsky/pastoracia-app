@@ -12,6 +12,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@azure/msal-browser": "^5.26.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },

@@ -1,7 +1,7 @@
 # Formáty dát – Pastorácia
 
-Súbory sú v OneDrive v priečinku `/Pastoracia-app/data/`
-(na PC: `C:\Users\MIchalPC\OneDrive\Pastoracia-app\data\`).
+Súbory sú v OneDrive pracovného účtu michal.pavlovsky@grkatpo.sk v priečinku `/Pastoracia-app/data/`
+(na PC: `C:\Users\MIchalPC\OneDrive - Greckokatolicke arcibiskupstvo Presov\Pastoracia-app\data\`).
 Číta ich aj iný nástroj (Claude), preto sa formát musí dodržať presne.
 
 ## Spoločné pravidlá
