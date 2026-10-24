@@ -34,6 +34,15 @@ export function IkonaList(p: IkonaProps) {
   )
 }
 
+export function IkonaKalendar(p: IkonaProps) {
+  return (
+    <Ikona {...p}>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 10h18M8 3v4M16 3v4M12 13v5M10 15h4" />
+    </Ikona>
+  )
+}
+
 export function IkonaPastoracia(p: IkonaProps) {
   return (
     <Ikona {...p}>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAplikacia } from '../app/kontext'
-import { INTENCIE, PLAN } from '../modules/farsky-list/data'
+import { INTENCIE } from '../modules/intencie-sopkovce/data'
+import { PLAN } from '../modules/farsky-list/data'
 import type { InfoPriecinka } from '../storage/graph'
 import { useSubor } from '../storage/useSubor'
 import { StavSynchronizacie } from '../ui/StavSynchronizacie'

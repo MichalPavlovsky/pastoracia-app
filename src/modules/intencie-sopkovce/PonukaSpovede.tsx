@@ -1,6 +1,6 @@
 // V týždni prvého piatku ponúkne spoveď hodinu pred liturgiou. Pridá ju až po kliknutí.
 
-import { navrhSpovedePrvyPiatok, type DenForm, type SpovedForm } from '../model/intencie'
+import { navrhSpovedePrvyPiatok, type DenForm, type SpovedForm } from './model/intencie'
 
 export function PonukaSpovede({ form, onPridaj }: { form: DenForm; onPridaj: (s: SpovedForm) => void }) {
   const navrh = navrhSpovedePrvyPiatok(form)

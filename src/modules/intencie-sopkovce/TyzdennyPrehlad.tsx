@@ -1,5 +1,5 @@
-import { jeNedela, jePrvyPiatok } from '../../../lib/datum'
-import { dniTyzdna, formatIntencia, NAZVY_TYPOV, type IntencieSubor } from '../model/intencie'
+import { jeNedela, jePrvyPiatok } from '../../lib/datum'
+import { dniTyzdna, formatIntencia, NAZVY_TYPOV, type IntencieSubor } from './model/intencie'
 import { datumKratko } from './kalendar'
 import './kalendar.css'
 

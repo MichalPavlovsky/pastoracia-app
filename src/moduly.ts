@@ -2,10 +2,11 @@
 
 import type { ComponentType } from 'react'
 import { FarskyList } from './modules/farsky-list/FarskyList'
+import { Intencie } from './modules/intencie-sopkovce/Intencie'
 import { Knihy } from './modules/knihy/Knihy'
 import { Ludia } from './modules/ludia/Ludia'
 import { Pastoracia } from './modules/pastoracia/Pastoracia'
-import { IkonaKniha, IkonaList, IkonaLudia, IkonaPastoracia } from './ui/ikony'
+import { IkonaKalendar, IkonaKniha, IkonaList, IkonaLudia, IkonaPastoracia } from './ui/ikony'
 
 export interface ModulInfo {
   id: string
@@ -20,9 +21,17 @@ export interface ModulInfo {
 
 export const MODULY: ModulInfo[] = [
   {
+    id: 'intencie-sopkovce',
+    nazov: 'Intencie Sopkovce',
+    popis: 'Bohoslužby, intencie a spovede',
+    cesta: '/intencie',
+    Ikona: IkonaKalendar,
+    Obrazovka: Intencie,
+  },
+  {
     id: 'farsky-list',
     nazov: 'Farský list',
-    popis: 'Intencie Sopkovce a témy na list',
+    popis: 'Moje témy na týždne dopredu',
     cesta: '/farsky-list',
     Ikona: IkonaList,
     Obrazovka: FarskyList,

@@ -7,8 +7,8 @@ describe('parsujHash', () => {
   })
 
   it('oddelí cestu a parametre', () => {
-    const { cesta, parametre } = parsujHash('#/farsky-list/temy/pridat?url=https%3A%2F%2Fa.sk&title=X')
-    expect(cesta).toBe('/farsky-list/temy/pridat')
+    const { cesta, parametre } = parsujHash('#/farsky-list/pridat?url=https%3A%2F%2Fa.sk&title=X')
+    expect(cesta).toBe('/farsky-list/pridat')
     expect(parametre.get('url')).toBe('https://a.sk')
     expect(parametre.get('title')).toBe('X')
   })

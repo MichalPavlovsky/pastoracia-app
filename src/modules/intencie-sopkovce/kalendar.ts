@@ -1,6 +1,6 @@
 // Pomocné funkcie pre mesačný kalendár (týždeň začína pondelkom).
 
-import { denVTyzdni, pondelokTyzdna, pridajDni } from '../../../lib/datum'
+import { denVTyzdni, pondelokTyzdna, pridajDni } from '../../lib/datum'
 
 export const NAZVY_DNI_KRATKE = ['Po', 'Ut', 'St', 'Št', 'Pi', 'So', 'Ne']
 

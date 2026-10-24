@@ -1,7 +1,7 @@
 // Formulár jedného dňa: bohoslužby s intenciami, spovede a oznam.
 
 import { useState, type FormEvent } from 'react'
-import { formatDatum, jeCas, jeDatum, jeNedela, jePrvyPiatok } from '../../../lib/datum'
+import { formatDatum, jeCas, jeDatum, jeNedela, jePrvyPiatok } from '../../lib/datum'
 import {
   NAZVY_TYPOV,
   RYCHLE_BOHOSLUZBY,
@@ -20,7 +20,7 @@ import {
   type SpovedForm,
   type TypBohosluzby,
   type Znak,
-} from '../model/intencie'
+} from './model/intencie'
 import { PonukaSpovede } from './PonukaSpovede'
 import './formular.css'
 

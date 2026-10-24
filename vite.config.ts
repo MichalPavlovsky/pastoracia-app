@@ -32,7 +32,7 @@ export default defineConfig({
         ],
         // Android: zdieľanie odkazu do aplikácie. iPhone: rovnakú adresu otvorí Skratka.
         share_target: {
-          action: `${base}#/farsky-list/temy/pridat`,
+          action: `${base}#/farsky-list/pridat`,
           method: 'GET',
           params: { title: 'title', text: 'text', url: 'url' },
         },

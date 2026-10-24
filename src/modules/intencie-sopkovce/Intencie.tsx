@@ -1,13 +1,13 @@
-// Záložka „Intencie Sopkovce“: kalendár / týždeň a formulár dňa.
-// Otvorený deň je v adrese (#/farsky-list/intencie/2026-11-06), takže Späť v telefóne formulár zavrie.
+// Modul „Intencie Sopkovce“: kalendár / týždeň a formulár dňa.
+// Otvorený deň je v adrese (#/intencie/2026-11-06), takže Späť v telefóne formulár zavrie.
 
 import { useState } from 'react'
-import { prejdi } from '../../../app/smerovanie'
-import { dnes, jeDatum, pondelokTyzdna, pridajDni } from '../../../lib/datum'
-import { useSubor } from '../../../storage/useSubor'
-import { StavSynchronizacie } from '../../../ui/StavSynchronizacie'
-import { INTENCIE } from '../data'
-import { nahradDen, najdiDen, pridajBohosluzbu, ulozDen, type Bohosluzba, type DenForm } from '../model/intencie'
+import { prejdi } from '../../app/smerovanie'
+import { dnes, jeDatum, pondelokTyzdna, pridajDni } from '../../lib/datum'
+import { useSubor } from '../../storage/useSubor'
+import { StavSynchronizacie } from '../../ui/StavSynchronizacie'
+import { INTENCIE } from './data'
+import { nahradDen, najdiDen, pridajBohosluzbu, ulozDen, type Bohosluzba, type DenForm } from './model/intencie'
 import { FormularDna } from './FormularDna'
 import { mesiacDatumu } from './kalendar'
 import { MesacnyKalendar } from './MesacnyKalendar'
@@ -21,16 +21,16 @@ const POHLADY: Array<{ id: Pohlad; nazov: string }> = [
   { id: 'buduci', nazov: 'Budúci týždeň' },
 ]
 
-const CESTA = '/farsky-list/intencie'
+const CESTA = '/intencie'
 
-/** podcesta = časť za /farsky-list, napr. '/intencie/2026-11-06' */
+/** podcesta = časť za /intencie, napr. '/2026-11-06' */
 export function Intencie({ podcesta }: { podcesta: string }) {
   const { data, stav, subor } = useSubor(INTENCIE)
   const dnesny = dnes()
   const [pohlad, setPohlad] = useState<Pohlad>('mesiac')
   const [mesiac, setMesiac] = useState(() => mesiacDatumu(dnesny))
 
-  const zhoda = /^\/intencie\/(\d{4}-\d{2}-\d{2})$/.exec(podcesta)
+  const zhoda = /^\/(\d{4}-\d{2}-\d{2})$/.exec(podcesta)
   const otvorenyDen = zhoda && jeDatum(zhoda[1]!) ? zhoda[1]! : null
 
   const otvor = (datum: string) => {

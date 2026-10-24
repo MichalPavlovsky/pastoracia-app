@@ -1,46 +1,13 @@
-import { prejdi } from '../../app/smerovanie'
-import { Intencie } from './intencie/Intencie'
+// Modul „Farský list“: moje vlastné návrhy tém na týždne dopredu.
+// #/farsky-list/pridat?url=… prijme odkaz zdieľaný z telefónu (Android, Skratka na iPhone).
+
 import { temaZoZdielania } from './model/temy'
 
-type Zalozka = 'intencie' | 'temy'
-
-const ZALOZKY: Array<{ id: Zalozka; nazov: string }> = [
-  { id: 'intencie', nazov: 'Intencie Sopkovce' },
-  { id: 'temy', nazov: 'Témy' },
-]
-
 export function FarskyList({ podcesta, parametre }: { podcesta: string; parametre: URLSearchParams }) {
-  const zalozka: Zalozka = podcesta.startsWith('/temy') ? 'temy' : 'intencie'
-  const prijate = podcesta === '/temy/pridat'
-
   return (
     <section className="obrazovka">
-      <div className="zalozky" role="tablist" aria-label="Farský list">
-        {ZALOZKY.map((z) => (
-          <button
-            key={z.id}
-            role="tab"
-            id={`zalozka-${z.id}`}
-            aria-selected={zalozka === z.id}
-            aria-controls="panel-zalozky"
-            className="zalozka"
-            onClick={() => prejdi(`/farsky-list/${z.id}`)}
-          >
-            {z.nazov}
-          </button>
-        ))}
-      </div>
-
-      <div id="panel-zalozky" role="tabpanel" aria-labelledby={`zalozka-${zalozka}`}>
-        {zalozka === 'intencie' ? (
-          <Intencie podcesta={podcesta} />
-        ) : (
-          <>
-            <p>Plán tém pribudne v ďalšom kroku.</p>
-            {prijate && <PrijatyOdkaz parametre={parametre} />}
-          </>
-        )}
-      </div>
+      <p>Plán tém pribudne v ďalšom kroku.</p>
+      {podcesta === '/pridat' && <PrijatyOdkaz parametre={parametre} />}
     </section>
   )
 }

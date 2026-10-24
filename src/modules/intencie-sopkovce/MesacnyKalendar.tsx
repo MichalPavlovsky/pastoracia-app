@@ -1,5 +1,5 @@
-import { denVTyzdni, jeNedela, jePrvyPiatok } from '../../../lib/datum'
-import { najdiDen, znackyDna, type IntencieSubor } from '../model/intencie'
+import { denVTyzdni, jeNedela, jePrvyPiatok } from '../../lib/datum'
+import { najdiDen, znackyDna, type IntencieSubor } from './model/intencie'
 import { mesiacDatumu, mriezkaMesiaca, nazovMesiaca, NAZVY_DNI_KRATKE, posunMesiac } from './kalendar'
 import './kalendar.css'
 
