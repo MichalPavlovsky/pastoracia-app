@@ -4,7 +4,7 @@
 import type { Prihlasenie } from '../auth/prihlasenie'
 import { PamatovyKalendar } from '../calendar/pamatovy'
 import { SynchronizaciaKalendara } from '../calendar/synchronizacia'
-import { dnes } from '../lib/datum'
+import { dnes, pridajDni } from '../lib/datum'
 import { serializujKnihy, SUBOR_KNIHY, type KnihySubor } from '../modules/knihy/model/knihy'
 import { serializujZamyslenia, SUBOR_ZAMYSLENIA } from '../modules/knihy/model/zamyslenia'
 import { PamatovaCache } from '../storage/cache'
@@ -115,6 +115,17 @@ export function ukazkovaAplikacia(prihlasenie: Prihlasenie): Aplikacia {
             },
             { druh: 'komentar', nazov: 'Komentár k evanjeliu', zdroj: 'Opus Dei', text: 'Ukážkový komentár.', url: 'https://opusdei.org/sk-sk/gospel/' },
           ],
+        },
+        {
+          datum: pridajDni(dnes(), 1),
+          nazov: 'Ukážkový zajtrajšok',
+          citania: '1 Sol 1, 6-10 · Lk 11, 1-10',
+          svati: '',
+          myslienka: 'Učeníci neprosia o zázraky, ale aby sa naučili modliť.',
+          otazka: '',
+          zdroje: [],
+          texty: [],
+          dalsie: [],
         },
       ],
     }),
