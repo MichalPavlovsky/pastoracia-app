@@ -7,6 +7,8 @@ import {
   formularNaDen,
   kopirujBohosluzbu,
   molebenPred,
+  navrhSpovedePrvyPiatok,
+  pridajBohosluzbu,
   nahradDen,
   novaBohosluzba,
   parsujIntencie,
@@ -247,5 +249,52 @@ describe('zobrazenie', () => {
     ])
     expect(t[2]!.den?.datum).toBe('2026-12-23')
     expect(t[0]!.den).toBeUndefined()
+  })
+})
+
+describe('pridanie bohoslužby z formulára na iný deň', () => {
+  it('pridá kópiu bez prázdnych intencií, bez kľúčov formulára', () => {
+    const b = novaBohosluzba('17:00')
+    b.intencie.push({ kluc: k, znak: '*', text: 'Anna', objednal: 'p. Nová', poznamka: '' })
+    const s = pridajBohosluzbu(parsujIntencie(PRIKLAD), '2026-12-23', b, true)
+    expect(s.dni[0]!.bohosluzby.map((x) => x.cas)).toEqual(['16:30', '17:00'])
+    expect(s.dni[0]!.bohosluzby[1]).toEqual({
+      cas: '17:00',
+      typ: 'liturgia',
+      intencie: [{ znak: '*', text: 'Anna', objednal: 'p. Nová', poznamka: '' }],
+    })
+    expect(pridajBohosluzbu(prazdnySubor(), '2026-12-24', b, false).dni[0]!.bohosluzby[0]!.intencie).toEqual([])
+    expect(() => pridajBohosluzbu(prazdnySubor(), '2026-12-24', novaBohosluzba(''), true)).toThrow()
+  })
+})
+
+describe('ponuka spovede v týždni prvého piatku', () => {
+  const form = (datum: string, ...casy: string[]) => {
+    const f = denNaFormular(datum)
+    f.bohosluzby.push(...casy.map((c) => novaBohosluzba(c)))
+    return f
+  }
+
+  it('ponúkne spoveď hodinu pred prvou liturgiou v ktorýkoľvek deň toho týždňa', () => {
+    expect(navrhSpovedePrvyPiatok(form('2026-11-06', '17:00'))).toMatchObject({ od: '16:00', do: '' })
+    expect(navrhSpovedePrvyPiatok(form('2026-11-03', '17:00', '16:30'))).toMatchObject({ od: '15:30' })
+    expect(navrhSpovedePrvyPiatok(form('2026-12-28', '16:30'))).toMatchObject({ od: '15:30' })
+  })
+
+  it('nič neponúkne mimo týždňa, bez liturgie alebo keď už spoveď je', () => {
+    expect(navrhSpovedePrvyPiatok(form('2026-11-13', '17:00'))).toBeNull()
+    expect(navrhSpovedePrvyPiatok(form('2026-11-06'))).toBeNull()
+    const f = form('2026-11-06', '17:00')
+    f.bohosluzby[0]!.typ = 'moleben'
+    expect(navrhSpovedePrvyPiatok(f)).toBeNull()
+    const g = form('2026-11-06', '17:00')
+    g.spovede.push(spovedPred('17:00'))
+    expect(navrhSpovedePrvyPiatok(g)).toBeNull()
+  })
+
+  it('nič nepridá do formulára samo', () => {
+    const f = form('2026-11-06', '17:00')
+    navrhSpovedePrvyPiatok(f)
+    expect(f.spovede).toEqual([])
   })
 })

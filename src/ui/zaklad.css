@@ -393,3 +393,7 @@ h3 {
   color: var(--hlavna-text);
   font-weight: 600;
 }
+
+.intencie-pohlad {
+  margin: 12px 0 16px;
+}

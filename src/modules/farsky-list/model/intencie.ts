@@ -1,7 +1,7 @@
 // Intencie Sopkovce: typy, čítanie/zápis sopkovce-intencie.json a prevod formulár ↔ JSON.
 // Formát je popísaný v SCHEMA.md a musí sa dodržať presne.
 
-import { casNaMinuty, jeCas, jeDatum, pondelokTyzdna, pridajDni, posunCas } from '../../../lib/datum'
+import { casNaMinuty, jeCas, jeDatum, pondelokTyzdna, pridajDni, posunCas, tyzdenSPrvymPiatkom } from '../../../lib/datum'
 import { ChybaFormatu, jedenZ, naText, novyKluc, obj, overVerziu, parsujText, pole, text } from '../../../lib/json'
 
 export const SUBOR_INTENCIE = 'sopkovce-intencie.json'
@@ -256,9 +256,38 @@ export function kopirujBohosluzbu(
 ): IntencieSubor {
   const b = najdiDen(subor, zDatumu)?.bohosluzby[index]
   if (!b) throw new Error(`Bohoslužba ${zDatumu} #${index} neexistuje`)
-  const kopia: Bohosluzba = { cas: b.cas, typ: b.typ, intencie: sIntenciami ? b.intencie.map((i) => ({ ...i })) : [] }
+  return pridajBohosluzbu(subor, naDatum, b, sIntenciami)
+}
+
+/** Pridá kópiu bohoslužby (napr. práve upravovanej vo formulári) k inému dňu. Prázdne intencie vynechá. */
+export function pridajBohosluzbu(
+  subor: IntencieSubor,
+  naDatum: string,
+  b: Bohosluzba,
+  sIntenciami: boolean,
+): IntencieSubor {
+  if (!jeDatum(naDatum)) throw new Error(`Neplatný dátum: ${naDatum}`)
+  if (!jeCas(b.cas)) throw new Error(`Neplatný čas bohoslužby: ${b.cas}`)
+  const intencie = sIntenciami
+    ? b.intencie
+        .filter((i) => !prazdnaIntencia(i))
+        .map((i) => ({ znak: i.znak, text: i.text, objednal: i.objednal, poznamka: i.poznamka }))
+    : []
   const ciel = najdiDen(subor, naDatum) ?? { datum: naDatum, bohosluzby: [], spovede: [], oznam: '' }
-  return nahradDen(subor, naDatum, { ...ciel, bohosluzby: [...ciel.bohosluzby, kopia] })
+  return nahradDen(subor, naDatum, { ...ciel, bohosluzby: [...ciel.bohosluzby, { cas: b.cas, typ: b.typ, intencie }] })
+}
+
+/**
+ * Ponuka „spoveď hodinu pred liturgiou“ v týždni prvého piatku.
+ * Vráti navrhovanú spoveď, alebo null, ak nie je čo ponúknuť. Nič nepridáva – to rozhodne používateľ.
+ */
+export function navrhSpovedePrvyPiatok(f: DenForm): SpovedForm | null {
+  if (!jeDatum(f.datum) || !tyzdenSPrvymPiatkom(f.datum)) return null
+  const liturgia = prvaLiturgia(f)
+  if (!liturgia || casNaMinuty(liturgia.cas) < 60) return null
+  const navrh = spovedPred(liturgia.cas)
+  if (f.spovede.some((s) => s.od === navrh.od)) return null
+  return navrh
 }
 
 // ---------- rýchle voľby ----------

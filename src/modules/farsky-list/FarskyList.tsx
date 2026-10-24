@@ -1,4 +1,5 @@
 import { prejdi } from '../../app/smerovanie'
+import { Intencie } from './intencie/Intencie'
 import { temaZoZdielania } from './model/temy'
 
 type Zalozka = 'intencie' | 'temy'
@@ -32,7 +33,7 @@ export function FarskyList({ podcesta, parametre }: { podcesta: string; parametr
 
       <div id="panel-zalozky" role="tabpanel" aria-labelledby={`zalozka-${zalozka}`}>
         {zalozka === 'intencie' ? (
-          <p>Kalendár intencií pribudne v ďalšom kroku.</p>
+          <Intencie podcesta={podcesta} />
         ) : (
           <>
             <p>Plán tém pribudne v ďalšom kroku.</p>

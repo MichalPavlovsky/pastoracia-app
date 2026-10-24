@@ -1,0 +1,199 @@
+/* Formulár dňa – mobile first. */
+
+.fd {
+  padding-bottom: 0.5rem;
+}
+
+.fd-nadpis {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0 0 0.5rem;
+}
+
+.fd-stitok {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--hlavna);
+}
+
+.fd-sekcia {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.fd-rychle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.fd-rychle .tlacidlo:disabled,
+.fd .tlacidlo:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.fd-pomoc {
+  margin: 0.5rem 0;
+  color: var(--text-slabsi);
+  font-size: 0.9rem;
+}
+
+.fd-karta {
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+}
+
+.fd-polia {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 520px) {
+  .fd-polia {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .fd-pole-siroke {
+    grid-column: 1 / -1;
+  }
+}
+
+.fd-pole {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.fd-popis {
+  font-size: 0.85rem;
+  color: var(--text-slabsi);
+}
+
+.fd-vstup {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--pozadie);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+}
+
+.fd-vstup[aria-invalid='true'] {
+  border-color: var(--chyba);
+}
+
+.fd-oznam {
+  resize: vertical;
+}
+
+.fd-chyba {
+  font-size: 0.9rem;
+}
+
+.fd-intencie {
+  margin-top: 0.5rem;
+}
+
+.fd-intencia {
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--okraj);
+}
+
+.fd-intencia-rad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fd-prepinac {
+  flex: none;
+  width: 112px;
+}
+
+.fd-znak {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.fd-text {
+  flex: 1 1 140px;
+  width: auto;
+}
+
+.fd-mala {
+  flex: none;
+  width: 48px;
+  padding: 0;
+}
+
+.fd-viac {
+  min-height: 48px;
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--hlavna);
+  font: inherit;
+  cursor: pointer;
+}
+
+.fd-potvrdenie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fd-kopia {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 1px dashed var(--okraj);
+  border-radius: var(--zaoblenie);
+}
+
+.fd-zaskrtnutie {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 48px;
+}
+
+.fd-zaskrtnutie input {
+  width: 24px;
+  height: 24px;
+}
+
+.fd-hotovo {
+  margin: 0.5rem 0 0;
+  color: var(--ok);
+  font-weight: 600;
+}
+
+.fd-pata {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  margin-top: 1.5rem;
+  padding: 0.75rem 0 max(0.75rem, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--okraj);
+  background: var(--pozadie);
+}
+
+.fd-pata-rad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
