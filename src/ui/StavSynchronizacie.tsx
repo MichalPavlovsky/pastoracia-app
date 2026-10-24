@@ -4,7 +4,7 @@ import { useAplikacia } from '../app/kontext'
 import type { DatovySubor } from '../storage/sync'
 import type { Stav, StavSuboru } from '../storage/types'
 
-const POPIS: Record<Stav, string> = {
+export const POPIS_STAVU: Record<Stav, string> = {
   nacitava: 'Načítavam…',
   synchronizovane: 'Uložené v OneDrive',
   caka: 'Uložené v zariadení, odošle sa po pripojení',
@@ -21,7 +21,7 @@ export function StavSynchronizacie<T>({ stav, subor }: { stav: StavSuboru; subor
   return (
     <div className="stav-sync" data-stav={stav.stav}>
       <p>
-        <span className="stav-bodka" aria-hidden /> {POPIS[stav.stav]}
+        <span className="stav-bodka" aria-hidden /> {POPIS_STAVU[stav.stav]}
         {stav.chyba && stav.stav !== 'offline' ? `: ${stav.chyba}` : ''}
       </p>
       {prihlasZnova && (

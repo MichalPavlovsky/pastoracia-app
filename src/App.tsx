@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { AplikaciaKontext, type Aplikacia } from './app/kontext'
 import { Prihlasenie } from './auth/prihlasenie'
 import { chybaKonfiguracie, jePovolenaAdresa } from './config'
-import { Nastavenia } from './shell/Nastavenia'
+import { Shell } from './shell/Shell'
 import { IndexedDbCache } from './storage/cache'
 import { GraphOneDrive } from './storage/graph'
 import { Uloziste } from './storage/store'
@@ -69,12 +69,9 @@ export default function App() {
         </Uvod>
       )
     case 'prihlaseny':
-      // Domov so 4 dlaždicami príde v kroku 6
       return (
         <AplikaciaKontext.Provider value={faza.aplikacia}>
-          <main className="aplikacia">
-            <Nastavenia />
-          </main>
+          <Shell />
         </AplikaciaKontext.Provider>
       )
   }

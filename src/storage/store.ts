@@ -6,10 +6,15 @@
 // Nový modul = nová DefiniciaSuboru, nič iné netreba meniť.
 
 import { DatovySubor } from './sync'
-import type { DefiniciaSuboru, LokalnaCache, VzdialeneUloziste } from './types'
+import type { DefiniciaSuboru, LokalnaCache, Stav, VzdialeneUloziste } from './types'
+
+// Od najdôležitejšieho po najmenej dôležitý
+const PRIORITA_STAVU: Stav[] = ['chyba', 'konflikt', 'caka', 'offline', 'odosiela', 'nacitava', 'synchronizovane']
 
 export class Uloziste {
   private subory = new Map<string, DatovySubor<unknown>>()
+  private odhlasenia: Array<() => void> = []
+  private posluchaciStavu = new Set<() => void>()
 
   constructor(
     private vzdialene: VzdialeneUloziste,
@@ -22,9 +27,27 @@ export class Uloziste {
     if (!s) {
       s = new DatovySubor(def, this.vzdialene, this.cache)
       this.subory.set(def.nazov, s as DatovySubor<unknown>)
+      this.odhlasenia.push(s.odober(() => this.oznamStav()))
       void s.nacitaj()
+      this.oznamStav()
     }
     return s
+  }
+
+  /** Najdôležitejší stav zo všetkých súborov (na jednu bodku v hornej lište). */
+  celkovyStav(): Stav {
+    const stavy = new Set([...this.subory.values()].map((s) => s.stav.stav))
+    return PRIORITA_STAVU.find((st) => stavy.has(st)) ?? 'synchronizovane'
+  }
+
+  /** Prihlásenie na zmeny stavu ktoréhokoľvek súboru, aj tých zaregistrovaných neskôr. */
+  odoberStav(cb: () => void): () => void {
+    this.posluchaciStavu.add(cb)
+    return () => this.posluchaciStavu.delete(cb)
+  }
+
+  private oznamStav(): void {
+    for (const cb of this.posluchaciStavu) cb()
   }
 
   async synchronizujVsetko(): Promise<void> {
@@ -47,7 +70,10 @@ export class Uloziste {
 
   /** Pri odhlásení: zmaže lokálne kópie (OneDrive ostane nedotknutý). */
   async vymazLokalneData(): Promise<void> {
+    for (const odhlas of this.odhlasenia) odhlas()
+    this.odhlasenia = []
     this.subory.clear()
+    this.oznamStav()
     await this.cache.vymazVsetko()
   }
 }

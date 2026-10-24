@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useAplikacia } from '../app/kontext'
 import { INTENCIE, PLAN } from '../modules/farsky-list/data'
-import { nahradDen } from '../modules/farsky-list/model/intencie'
 import type { InfoPriecinka } from '../storage/graph'
 import { useSubor } from '../storage/useSubor'
 import { StavSynchronizacie } from '../ui/StavSynchronizacie'
+import { nacitajTemu, pouziTemu, ulozTemu, type Tema } from '../ui/tema'
 
-// Dátum mimo bežného používania – len na skúšku zápisu (krok 5)
-const SKUSOBNY_DEN = '2099-01-01'
+const TEMY: Array<{ id: Tema; nazov: string }> = [
+  { id: 'auto', nazov: 'Automaticky' },
+  { id: 'svetly', nazov: 'Svetlý' },
+  { id: 'tmavy', nazov: 'Tmavý' },
+]
 
 export function Nastavenia() {
   const { ucet, onedrive, uloziste, prihlasenie } = useAplikacia()
@@ -20,15 +23,12 @@ export function Nastavenia() {
     onedrive.infoPriecinka().then(setInfo, (e: Error) => setChybaInfo(e.message))
   }, [onedrive])
 
-  const skusobny = intencie.data.dni.some((d) => d.datum === SKUSOBNY_DEN)
-  const prepniSkusku = () =>
-    void intencie.subor.uloz(
-      nahradDen(
-        intencie.data,
-        SKUSOBNY_DEN,
-        skusobny ? null : { datum: SKUSOBNY_DEN, bohosluzby: [], spovede: [], oznam: 'Skúška pripojenia – môžeš zmazať' },
-      ),
-    )
+  const [tema, nastavTemu] = useState<Tema>(nacitajTemu)
+  const zvolTemu = (t: Tema) => {
+    ulozTemu(t)
+    pouziTemu(t)
+    nastavTemu(t)
+  }
 
   const odhlas = async () => {
     await uloziste.vymazLokalneData()
@@ -37,7 +37,14 @@ export function Nastavenia() {
 
   return (
     <section className="obrazovka">
-      <h1>Nastavenia</h1>
+      <h2 className="prva">Vzhľad</h2>
+      <div className="prepinac" role="group" aria-label="Vzhľad">
+        {TEMY.map((t) => (
+          <button key={t.id} className="prepinac-tlacidlo" aria-pressed={tema === t.id} onClick={() => zvolTemu(t.id)}>
+            {t.nazov}
+          </button>
+        ))}
+      </div>
 
       <h2>Účet</h2>
       <dl className="udaje">
@@ -80,14 +87,6 @@ export function Nastavenia() {
           Synchronizovať teraz
         </button>
       </div>
-
-      <h2>Skúška pripojenia</h2>
-      <p>
-        Zapíše do intencií skúšobný oznam na {SKUSOBNY_DEN}. Po skúške ho tým istým tlačidlom zmaž.
-      </p>
-      <button className="tlacidlo" onClick={prepniSkusku}>
-        {skusobny ? 'Zmazať skúšobný oznam' : 'Zapísať skúšobný oznam'}
-      </button>
 
       <h2>Odhlásenie</h2>
       <p>Dáta v OneDrive ostanú. Zmaže sa len kópia v tomto zariadení.</p>

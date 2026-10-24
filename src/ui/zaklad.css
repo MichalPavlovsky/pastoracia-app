@@ -1,5 +1,5 @@
 /* Základný vzhľad – mobile first, veľké dotykové prvky, svetlý aj tmavý režim.
-   Plný dizajn domovskej obrazovky príde v kroku 6. */
+   Téma: podľa systému, alebo natvrdo cez data-tema na <html>. */
 
 :root {
   --pozadie: #faf8f5;
@@ -17,7 +17,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-tema='svetly']) {
     --pozadie: #171412;
     --plocha: #221e1b;
     --text: #f1ece7;
@@ -30,6 +30,24 @@
     --chyba: #f2857c;
     color-scheme: dark;
   }
+}
+
+:root[data-tema='tmavy'] {
+  --pozadie: #171412;
+  --plocha: #221e1b;
+  --text: #f1ece7;
+  --text-slabsi: #a99f97;
+  --okraj: #3a3430;
+  --hlavna: #d9727f;
+  --hlavna-text: #1a0d0f;
+  --ok: #6cc28f;
+  --varovanie: #f0a94a;
+  --chyba: #f2857c;
+  color-scheme: dark;
+}
+
+:root[data-tema='svetly'] {
+  color-scheme: light;
 }
 
 * {
@@ -68,6 +86,10 @@ h3 {
   max-width: 720px;
   margin: 0 auto;
   padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+}
+
+.aplikacia {
+  padding-top: 16px;
 }
 
 .uvod {
@@ -175,4 +197,199 @@ h3 {
 .oznam ul {
   margin: 0.25rem 0;
   padding-left: 1.25rem;
+}
+
+/* ---------- horná lišta ---------- */
+
+.lista {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-top: env(safe-area-inset-top);
+  background: var(--pozadie);
+  border-bottom: 1px solid var(--okraj);
+}
+
+.lista-obsah {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 720px;
+  min-height: 56px;
+  margin: 0 auto;
+  padding: 0 8px;
+}
+
+.lista-nazov {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lista-miesto {
+  width: 8px;
+  flex: none;
+}
+
+.lista-tlacidlo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--zaoblenie);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.lista-tlacidlo:active {
+  background: var(--okraj);
+}
+
+.lista-tlacidlo:focus-visible,
+.dlazdica:focus-visible,
+.zalozka:focus-visible,
+.prepinac-tlacidlo:focus-visible {
+  outline: 3px solid var(--hlavna);
+  outline-offset: 2px;
+}
+
+.lista-tlacidlo .stav-bodka {
+  width: 12px;
+  height: 12px;
+}
+
+/* ---------- domov ---------- */
+
+.dlazdice {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 340px) {
+  .dlazdice {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.dlazdica {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 140px;
+  padding: 16px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+  color: var(--text);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.dlazdica svg {
+  color: var(--hlavna);
+}
+
+.dlazdica:active {
+  transform: scale(0.97);
+  background: var(--okraj);
+}
+
+.dlazdica-nazov {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.dlazdica-popis {
+  color: var(--text-slabsi);
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+/* ---------- záložky ---------- */
+
+.zalozky {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 4px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+}
+
+.zalozka {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: calc(var(--zaoblenie) - 4px);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.zalozka[aria-selected='true'] {
+  background: var(--hlavna);
+  color: var(--hlavna-text);
+}
+
+/* ---------- ostatné ---------- */
+
+.pripravujeme ul {
+  padding-left: 1.25rem;
+}
+
+.pripravujeme li {
+  margin: 0.25rem 0;
+}
+
+.obrazovka h2.prva {
+  margin-top: 0;
+}
+
+.prepinac {
+  display: flex;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+  overflow: hidden;
+}
+
+.prepinac-tlacidlo {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 4px;
+  border: 0;
+  border-left: 1px solid var(--okraj);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.prepinac-tlacidlo:first-child {
+  border-left: 0;
+}
+
+.prepinac-tlacidlo[aria-pressed='true'] {
+  background: var(--hlavna);
+  color: var(--hlavna-text);
+  font-weight: 600;
 }
