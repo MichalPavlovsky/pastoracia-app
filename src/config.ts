@@ -1,6 +1,7 @@
 // Nastavenia z .env.local (pozri .env.example). Nič tajné tu nie je, ale nepatrí to do kódu.
 
-const clientId = import.meta.env.VITE_MSAL_CLIENT_ID ?? ''
+// z hodnoty berieme len samotné GUID – pri kopírovaní do GitHubu sa prilepia aj znaky konca riadku
+const clientId = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.exec(import.meta.env.VITE_MSAL_CLIENT_ID ?? '')?.[0] ?? ''
 
 export const config = {
   clientId,

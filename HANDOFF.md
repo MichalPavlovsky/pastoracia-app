@@ -2,7 +2,7 @@
 
 ## Hotové
 - Fáza 1, Pastorácia (myšlienky), Ľudia, rozloženie na 320 px, ukážkový režim `?ukazka` – **pushnuté a nasadené** (commit c83f1d0).
-- **Kalendár Outlook pre Ľudí** (necommitnuté, nepushnuté):
+- **Kalendár Outlook pre Ľudí** (pushnuté, commit d4d44c0):
   - `src/calendar/`: `outlook.ts` (Graph, skryté vlastnosti PastoraciaZdroj/Pripomienka/Podpis), `zosulad.ts` (čo vytvoriť/upraviť/zmazať), `synchronizacia.ts` (jeden beh naraz, zapnutie v zariadení cez localStorage `pastoracia.kalendar`), `pamatovy.ts` (testy, ukážka).
   - `modules/ludia/model/kalendar.ts` (pripomienky → udalosti), `KalendarLudi.tsx` (prenos 1,5 s po zmene + riadok stavu), Nastavenia → „Pripojiť kalendár Outlook“.
   - `prihlasenie.ts`: `SCOPES_KALENDAR`, `ziskajTokenKalendara`, `pripojKalendar()` (presmerovanie); chyba pri návrate (napr. zamietnutý súhlas) už nezhodí aplikáciu → `chybaPresmerovania` v Nastaveniach.
@@ -10,7 +10,6 @@
 
 ## Čaká na Michala
 - Pridať v Azure oprávnenie `Calendars.ReadWrite` (NAVOD.md 5.1) – urobí Michal sám v portáli.
-- Súhlas s commitom a `git push`.
 - Test na iPhone: Nastavenia → Pripojiť kalendár → Ľudia → pripomienka → je v Outlooku?
 - Texty pre Knihy – dodá Michal.
 
