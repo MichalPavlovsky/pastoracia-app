@@ -20,4 +20,4 @@
 1. Michal na iPhone otestuje: Knihy, farby, PDF k téme aj k týždňu (nahranie z Files, otvorenie, ✕), karta Dnes v liturgii po prvom behu úlohy.
 2. Úlohu `zamyslenia-web` spustiť raz ručne („Run now“ v aplikácii), aby sa schválili nástroje (WebFetch, zápis).
 3. Pri „Treba načítať nové knihy“: spracovať ďalšie 2 z rebríčka.
-4. Drobnosť: v konzole „Cannot update a component while rendering“ pri `StavBodka` (setState počas renderu, existovalo pred Knihami).
+4. ~~„Cannot update a component while rendering“ pri `StavBodka`~~ – opravené (`Uloziste.subor` oznamuje stav cez `queueMicrotask`), commit lokálne, čaká na push.

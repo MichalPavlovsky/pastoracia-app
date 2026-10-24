@@ -48,6 +48,8 @@ describe('Uloziste – odoberStav', () => {
     const cb = vi.fn()
     u.odoberStav(cb)
     const plan = u.subor(PLAN)
+    expect(cb).not.toHaveBeenCalled()
+    await Promise.resolve()
     expect(cb).toHaveBeenCalled()
     cb.mockClear()
     await plan.nacitaj()

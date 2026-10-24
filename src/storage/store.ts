@@ -29,7 +29,8 @@ export class Uloziste {
       this.subory.set(def.nazov, s as DatovySubor<unknown>)
       this.odhlasenia.push(s.odober(() => this.oznamStav()))
       void s.nacitaj()
-      this.oznamStav()
+      // subor() sa volá aj počas renderu – oznámenie až po ňom
+      queueMicrotask(() => this.oznamStav())
     }
     return s
   }
