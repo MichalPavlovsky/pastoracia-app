@@ -1,0 +1,229 @@
+/* Farský list – témy. Predpona tm-. */
+
+.tm-formular {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border: 2px solid var(--hlavna);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+}
+
+.tm-formular-nadpis {
+  margin: 0 0 0.5rem;
+}
+
+.tm-pole {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  margin: 0 0 12px;
+}
+
+.tm-popis {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-slabsi);
+  font-size: 0.9rem;
+}
+
+.tm-vstup {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--pozadie);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+}
+
+textarea.tm-vstup {
+  resize: vertical;
+}
+
+.tm-pomoc {
+  color: var(--text-slabsi);
+  font-size: 0.9rem;
+}
+
+.tm-horna {
+  margin: 12px 0;
+}
+
+/* ---------- týždne ---------- */
+
+.tm-tyzden {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+}
+
+.tm-tyzden-nadpis {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.tm-stitok {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--hlavna);
+  color: var(--hlavna-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.tm-prazdny {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--text-slabsi);
+}
+
+.tm-temy {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tm-tema {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--pozadie);
+  overflow-wrap: anywhere;
+}
+
+.tm-pouzita > .tm-nazov,
+.tm-pouzita > .tm-zdroje,
+.tm-pouzita > .tm-poznamka {
+  opacity: 0.55;
+}
+
+.tm-taha {
+  position: relative;
+  z-index: 5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.tm-lista {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.tm-ikona {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.tm-ikona:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.tm-uchyt {
+  touch-action: none;
+  cursor: grab;
+  font-weight: 700;
+}
+
+.tm-stav {
+  min-height: 48px;
+  margin-left: auto;
+  padding: 0 14px;
+  border: 2px solid var(--okraj);
+  border-radius: 999px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tm-stav-plan {
+  border-color: var(--hlavna);
+  background: var(--hlavna);
+  color: var(--hlavna-text);
+}
+
+.tm-stav-pouzite {
+  border-color: var(--ok);
+  color: var(--ok);
+}
+
+.tm-ikona:focus-visible,
+.tm-stav:focus-visible,
+.tm-rozbal:focus-visible {
+  outline: 3px solid var(--hlavna);
+  outline-offset: 2px;
+}
+
+.tm-nazov {
+  margin: 8px 0 4px;
+  font-weight: 700;
+}
+
+.tm-zdroje {
+  margin: 4px 0;
+  padding-left: 1.25rem;
+}
+
+.tm-zdroje li {
+  margin: 2px 0;
+}
+
+.tm-poznamka {
+  margin: 4px 0;
+  white-space: pre-line;
+  color: var(--text-slabsi);
+}
+
+.tm-panel {
+  margin-top: 8px;
+}
+
+.tm-otazka {
+  margin: 0;
+}
+
+.tm-poznamka-tyzdna {
+  margin-top: 8px;
+}
+
+.tm-rozbal {
+  min-height: 48px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tm-dalsi {
+  width: 100%;
+  margin-bottom: 16px;
+}
