@@ -1,7 +1,9 @@
 // Človek v zozname „Všetci“: súhrn a po ťuknutí rozbalený detail.
 
 import { useState } from 'react'
+import { otvorVKalendari } from '../../calendar/ics'
 import { formatDatum } from '../../lib/datum'
+import { udalostPripomienky } from './model/kalendar'
 import { FormularPripomienky } from './FormularPripomienky'
 import { OdkazKontaktu, popisDna } from './NaRadeZoznam'
 import {
@@ -66,6 +68,17 @@ export function KartaCloveka({ clovek: c, dnesny, otvorena, onPrepni, onUprav, o
                     <input type="checkbox" checked={p.hotovo} onChange={() => uloz((d) => prepniHotovo(d, c.id, p.id))} />
                     <span className={!p.hotovo && p.datum < dnesny ? 'lu-meskanie' : ''}>{popisPripomienky(p, dnesny)}</span>
                   </label>
+                  {!p.hotovo && (
+                    <button
+                      type="button"
+                      className="lu-zmaz"
+                      aria-label="Pridať do kalendára v telefóne"
+                      title="Do kalendára"
+                      onClick={() => otvorVKalendari(udalostPripomienky(c, p))}
+                    >
+                      📅
+                    </button>
+                  )}
                   <button
                     type="button"
                     className="lu-zmaz"

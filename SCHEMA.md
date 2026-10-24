@@ -165,7 +165,8 @@ Komu sa ozvať (dlaždica Ľudia).
 - Pripomienky sú zoradené podľa `datum`, potom `cas`, potom `id`.
 - „Na rade“ je: každá nehotová pripomienka s dátumom do 7 dní (aj zmeškaná) a pravidelný kontakt
   `poslednyKontakt + ozvatSaKazdych` (ak `poslednyKontakt` chýba, tak hneď).
-- **Kalendár Outlook** (ak je v zariadení zapnutý): každá nehotová pripomienka s dátumom od dnes má
+- Kalendár: tlačidlo 📅 vytvorí z pripomienky súbor .ics (UID `<id pripomienky>@pastoracia-app`), do `ludia.json` sa nič nezapisuje.
+- **Kalendár Outlook** (v kóde pripravený, vypnutý – `config.kalendarOutlook`): každá nehotová pripomienka s dátumom od dnes má
   v predvolenom kalendári udalosť. Udalosť nesie skryté vlastnosti (sada `{5d0c9f4e-2b7a-4c3e-8f61-a94b2e7d1c38}`):
   `PastoraciaZdroj = "ludia"`, `PastoraciaPripomienka = id pripomienky`, `PastoraciaPodpis` (názov, text, dátum, čas
   v čase zápisu). Aplikácia porovná udalosti s pripomienkami a chýbajúce vytvorí, zmenené upraví, nepotrebné

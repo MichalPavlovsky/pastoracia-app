@@ -1,6 +1,8 @@
 // Modul „Ľudia“: komu sa ozvať. Záložky „Na rade“ a „Všetci“, formulár človeka hore.
+// #/ludia/pridat?text=… (alebo ?meno=…&kontakt=…) otvorí nového človeka zo Skratky „Do Ľudí“.
 
 import { useState } from 'react'
+import { prejdi } from '../../app/smerovanie'
 import { dnes } from '../../lib/datum'
 import { useSubor } from '../../storage/useSubor'
 import { StavSynchronizacie } from '../../ui/StavSynchronizacie'
@@ -11,6 +13,7 @@ import { KartaCloveka } from './KartaCloveka'
 import { NaRadeZoznam } from './NaRadeZoznam'
 import {
   clovekNaFormular,
+  clovekZoZdielania,
   najdiCloveka,
   naRade,
   ozvalSom,
@@ -28,16 +31,21 @@ interface Otvoreny {
   /** mení sa pri každom otvorení, aby sa formulár načítal odznova */
   kluc: number
   id: string | null
+  /** predvyplnenie nového človeka (zo Skratky) */
+  pociatok?: ClovekForm
 }
+
+const CESTA = '/ludia'
 
 const bezDiakritiky = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()
 
-export function Ludia(_props: { podcesta: string; parametre: URLSearchParams }) {
+export function Ludia({ podcesta, parametre }: { podcesta: string; parametre: URLSearchParams }) {
   const { data, stav, subor } = useSubor(LUDIA)
   const [zalozka, setZalozka] = useState<Zalozka>('na-rade')
   const [hladane, setHladane] = useState('')
   const [formular, setFormular] = useState<Otvoreny | null>(null)
   const [rozbaleny, setRozbaleny] = useState<string | null>(null)
+  const [predPodcesta, setPredPodcesta] = useState<string | null>(null)
 
   const dnesny = dnes()
   const rade = naRade(data, dnesny, 7)
@@ -47,7 +55,26 @@ export function Ludia(_props: { podcesta: string; parametre: URLSearchParams }) 
     void subor.uloz(zmena(subor.data))
   }
 
-  const otvor = (id: string | null) => setFormular((f) => ({ id, kluc: (f?.kluc ?? 0) + 1 }))
+  const otvor = (id: string | null, pociatok?: ClovekForm) => setFormular((f) => ({ id, pociatok, kluc: (f?.kluc ?? 0) + 1 }))
+
+  if (podcesta !== predPodcesta) {
+    setPredPodcesta(podcesta)
+    if (podcesta === '/pridat') {
+      otvor(
+        null,
+        clovekZoZdielania({
+          meno: parametre.get('meno') ?? undefined,
+          kontakt: parametre.get('kontakt') ?? undefined,
+          text: parametre.get('text') ?? undefined,
+        }),
+      )
+    }
+  }
+
+  const zavriFormular = () => {
+    setFormular(null)
+    if (podcesta === '/pridat') prejdi(CESTA)
+  }
 
   const ulozFormular = (f: ClovekForm) => {
     if (!formular) return
@@ -60,7 +87,7 @@ export function Ludia(_props: { podcesta: string; parametre: URLSearchParams }) 
       const id = formular.id
       uloz((d) => upravCloveka(d, id, f))
     }
-    setFormular(null)
+    zavriFormular()
   }
 
   const upravovany = formular?.id ? najdiCloveka(data, formular.id) : undefined
@@ -82,9 +109,9 @@ export function Ludia(_props: { podcesta: string; parametre: URLSearchParams }) 
         <FormularCloveka
           key={formular.kluc}
           nadpis={formular.id === null ? 'Nový človek' : 'Úprava'}
-          pociatok={clovekNaFormular(upravovany)}
+          pociatok={formular.pociatok ?? clovekNaFormular(upravovany)}
           onUloz={ulozFormular}
-          onZrus={() => setFormular(null)}
+          onZrus={zavriFormular}
         />
       )}
 

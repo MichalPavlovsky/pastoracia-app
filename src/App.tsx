@@ -4,7 +4,7 @@ import { jeUkazka, ukazkovaAplikacia } from './app/ukazka'
 import { Prihlasenie } from './auth/prihlasenie'
 import { KalendarOutlook } from './calendar/outlook'
 import { SynchronizaciaKalendara } from './calendar/synchronizacia'
-import { chybaKonfiguracie, jePovolenaAdresa } from './config'
+import { chybaKonfiguracie, config, jePovolenaAdresa } from './config'
 import { Shell } from './shell/Shell'
 import { IndexedDbCache } from './storage/cache'
 import { GraphOneDrive } from './storage/graph'
@@ -36,6 +36,7 @@ export default function App() {
         const uloziste = new Uloziste(onedrive, new IndexedDbCache())
         uloziste.sledujPripojenie()
         const kalendar = new SynchronizaciaKalendara(new KalendarOutlook(prihlasenie.ziskajTokenKalendara))
+        if (!config.kalendarOutlook) kalendar.vypni()
         setFaza({ typ: 'prihlaseny', aplikacia: { prihlasenie, ucet, onedrive, uloziste, kalendar } })
       },
       (e: Error) => setFaza({ typ: 'chyba', sprava: e.message }),

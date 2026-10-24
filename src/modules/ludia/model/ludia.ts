@@ -151,6 +151,22 @@ export function clovekNaFormular(c?: Clovek): ClovekForm {
   }
 }
 
+/**
+ * Nový človek zo Skratky (#/ludia/pridat): buď `meno` a `kontakt`, alebo `text`,
+ * kde prvý riadok je meno a ďalšie riadky kontakty (berie sa prvý neprázdny).
+ */
+export function clovekZoZdielania(p: { meno?: string; kontakt?: string; text?: string }): ClovekForm {
+  const riadky = (p.text ?? '')
+    .split(/\r?\n/)
+    .map((r) => r.trim())
+    .filter((r) => r !== '')
+  return {
+    ...clovekNaFormular(),
+    meno: (p.meno ?? riadky[0] ?? '').trim(),
+    kontakt: (p.kontakt ?? riadky[1] ?? '').trim(),
+  }
+}
+
 export function validujCloveka(f: ClovekForm): string[] {
   const chyby: string[] = []
   if (f.meno.trim() === '') chyby.push('Zadaj meno.')

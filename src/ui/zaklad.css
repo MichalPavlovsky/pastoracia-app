@@ -54,6 +54,20 @@
   box-sizing: border-box;
 }
 
+/* iPhone dáva dátumu a času pevnú minimálnu šírku a pole vytŕča z formulára */
+input[type='date'],
+input[type='time'] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  max-width: 100%;
+}
+
+input[type='date']::-webkit-date-and-time-value,
+input[type='time']::-webkit-date-and-time-value {
+  text-align: left;
+}
+
 body {
   margin: 0;
   background: var(--pozadie);

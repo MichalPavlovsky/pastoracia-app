@@ -73,18 +73,25 @@ Bez skratky: skopíruj odkaz a v aplikácii **Farský list → Vložiť odkaz**.
 `https://michalpavlovsky.github.io/pastoracia-app/#/pastoracia/pridat?url=`.
 Bez skratky: **Pastorácia → Vložiť odkaz**.
 
+**Tretia skratka „Do Ľudí“** (človek z Kontaktov; v iPhone v angličtine):
+1. Nová skratka **Do Ľudí**, akcia **Select Contact**.
+2. Akcia **Text**: ťukni na premennú **Contact** → vlastnosť **Name**, potom Enter (nový riadok) a znova **Contact** → **Phone Numbers**.
+3. Akcia **Encode URL** (vstup: Text).
+4. Akcia **Text**: `https://michalpavlovsky.github.io/pastoracia-app/#/ludia/pridat?text=` a hneď za to premenná **URL Encoded Text**.
+5. Akcia **Open URLs**.
+6. Spúšťaj ju z aplikácie Skratky alebo si ju daj na plochu (šípka pri názve → **Add to Home Screen**). Otvorí sa „Nový človek“ s menom a číslom.
+
 Pri vývoji na PC: `http://localhost:5174/?ukazka` otvorí aplikáciu bez prihlásenia s prázdnymi dátami len v pamäti (na skúšanie obrazoviek; po obnovení stránky zmiznú, do OneDrive sa nič nezapíše). Na GitHub Pages tento režim nie je.
 
-## 5. Kalendár Outlook (pripomienky z Ľudí)
+## 5. Pripomienky do kalendára v telefóne
 
-1. **Azure (raz):** [portal.azure.com](https://portal.azure.com) → **App registrations** → **Pastorácia** → **API permissions** → **Add a permission** → **Microsoft Graph** → **Delegated** → `Calendars.ReadWrite` → **Add**.
-2. **V každom zariadení:** Nastavenia → **Pripojiť kalendár Outlook** → Microsoft sa opýta na súhlas → **Prijať**.
+Pri každej nehotovej pripomienke (Ľudia → človek) je tlačidlo **📅**. Ťukni naň → iPhone ukáže udalosť → **Pridať do kalendára** (Add to Calendar). Udalosť má názov „Meno: dôvod“, v poznámke kontakt:
+- s časom → 15 minút, upozornenie 15 min vopred,
+- bez času → celodenná, upozornenie o 18:00 deň predtým.
 
-Potom sa každá nehotová pripomienka od dnes ďalej sama zapíše do predvoleného kalendára (názov „Meno: dôvod“, v poznámke kontakt):
-- s časom → 15-minútová udalosť, upozornenie 15 min vopred,
-- bez času → celodenná udalosť, upozornenie o 18:00 deň predtým.
+Keď pripomienku odškrtneš alebo zmažeš, udalosť v kalendári ostane – zmaž ju v kalendári ručne.
 
-Odškrtnutá alebo zmazaná pripomienka sa z kalendára zmaže (minulé udalosti ostávajú). Udalosť upravená ručne v Outlooku sa neprepíše, kým sa nezmení pripomienka.
+Pozn.: priame prepojenie s Outlookom je v kóde pripravené, ale vypnuté – tenant grkatpo.sk žiada na oprávnenie `Calendars.ReadWrite` súhlas správcu (`kalendarOutlook` v `src/config.ts`).
 
 ## 6. Keď niečo nejde
 
@@ -94,6 +101,6 @@ Odškrtnutá alebo zmazaná pripomienka sa z kalendára zmaže (minulé udalosti
 | „Treba sa znova prihlásiť“ | Tlačidlo **Prihlásiť sa znova** v Nastaveniach. |
 | Oranžová bodka | Zmena je v telefóne, odošle sa po pripojení k internetu. |
 | „Treba potvrdiť zlúčenie“ | To isté sa zmenilo aj na inom zariadení – v Nastaveniach vyber **Potvrdiť zlúčenie** alebo **Ponechať verziu z iného zariadenia**. |
-| „Kalendár treba znova pripojiť“ alebo „Need admin approval“ | Chýba bod 5.1 alebo súhlas; ak organizácia nedovolí súhlas používateľovi, musí ho dať správca tenantu (Enterprise applications → Pastorácia → **Grant admin consent**). |
+| Po ťuknutí na 📅 sa nič neotvorí | Skús to isté v Safari (nie z ikony na ploche) a daj mi vedieť. |
 | AADSTS50011 pri prihlásení | V Azure chýba presná adresa (bod 2.4). |
 | Na GitHub Pages biela stránka / chyba konfigurácie | Chýbajú premenné z bodu 2.2 → doplň ich a v **Actions** spusti nasadenie znova (**Run workflow**). |

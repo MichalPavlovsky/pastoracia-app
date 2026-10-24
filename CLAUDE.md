@@ -25,12 +25,13 @@ React 19 + Vite 8 + TypeScript 7 (strict, `noUncheckedIndexedAccess`, `verbatimM
 - `src/modules/intencie-sopkovce/` – kalendár, týždeň, formulár dňa, `model/intencie.ts`
 - `src/modules/farsky-list/` – plán tém, `model/temy.ts`, UI v `temy/`
 - `src/modules/pastoracia/` – myšlienky, `model/myslienky.ts`
-- `src/modules/ludia/` – komu sa ozvať, „Na rade“, pripomienky → kalendár Outlook, `model/ludia.ts`, `model/kalendar.ts`, odznak na dlaždici
+- `src/modules/ludia/` – komu sa ozvať, „Na rade“, pripomienky → 📅 .ics do kalendára v telefóne, `#/ludia/pridat?text=meno
+číslo` (Skratka „Do Ľudí“), `model/ludia.ts`, `model/kalendar.ts`, odznak na dlaždici
 - `src/modules/knihy/` – zatiaľ „Pripravujeme“ + `types.ts`
 - `src/storage/` – OneDrive cez Graph (eTag/If-Match), IndexedDB, offline fronta, trojcestné zlúčenie konfliktov; modul opíše súbor cez `DefiniciaSuboru`
 - `src/auth/prihlasenie.ts` – MSAL, presmerovanie, authority `common`, `responseMode: query` (hash používa smerovanie)
 - `src/app/smerovanie.ts` – router nad `#hash`; `src/shell/` – lišta, Domov, Nastavenia
-- `src/calendar/` – Outlook cez Graph (`outlook.ts`), `zosulad.ts`, `synchronizacia.ts` (zapína sa v zariadení, localStorage `pastoracia.kalendar`)
+- `src/calendar/` – `ics.ts` (používa sa); Outlook cez Graph je **vypnutý** (`config.kalendarOutlook`, tenant chce súhlas správcu) – (`outlook.ts`), `zosulad.ts`, `synchronizacia.ts` (zapína sa v zariadení, localStorage `pastoracia.kalendar`)
 
 ## Dáta – formát dodrž presne
 - Záväzný popis: **`SCHEMA.md`**. Súbory číta aj skill `fl` (Farský list) – len číta.

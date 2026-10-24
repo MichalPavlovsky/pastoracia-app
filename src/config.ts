@@ -5,6 +5,8 @@ const clientId = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
 
 export const config = {
   clientId,
+  /** Outlook kalendár cez Graph – vypnutý, tenant grkatpo.sk žiada súhlas správcu (Calendars.ReadWrite) */
+  kalendarOutlook: false,
   /** adresy, ktoré smú aplikáciu používať (malými písmenami) */
   povoleneAdresy: (import.meta.env.VITE_POVOLENE_ADRESY ?? '')
     .split(',')

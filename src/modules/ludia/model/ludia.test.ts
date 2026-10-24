@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { ChybaFormatu } from '../../../lib/json'
 import {
+  clovekZoZdielania,
   clovekNaFormular,
   dalsiPravidelny,
   naRade,
@@ -145,5 +146,16 @@ describe('zlúčenie', () => {
   it('ten istý človek na oboch → konflikt', () => {
     const v = zlucLudi(ukazka, ozvalSom(ukazka, 'c-1', '2026-10-24'), zmazCloveka(ukazka, 'c-1'))
     expect(v.konflikty).toEqual(['Anna: zmena na oboch zariadeniach. Ponechaná tvoja verzia.'])
+  })
+})
+
+describe('zo Skratky', () => {
+  it('meno a kontakt z parametrov alebo z textu po riadkoch', () => {
+    expect(clovekZoZdielania({ meno: ' Ján ', kontakt: '0905 111 222' })).toMatchObject({ meno: 'Ján', kontakt: '0905 111 222', ozvatSaKazdych: 0 })
+    expect(clovekZoZdielania({ text: 'Mária Kováčová\n\n+421 905 111 222\n0902 333 444' })).toMatchObject({
+      meno: 'Mária Kováčová',
+      kontakt: '+421 905 111 222',
+    })
+    expect(clovekZoZdielania({})).toMatchObject({ meno: '', kontakt: '' })
   })
 })

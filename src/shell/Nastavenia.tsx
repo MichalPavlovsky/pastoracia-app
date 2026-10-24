@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAplikacia } from '../app/kontext'
 import { jeUkazka } from '../app/ukazka'
+import { config } from '../config'
 import { useStavKalendara } from '../modules/ludia/KalendarLudi'
 import { INTENCIE } from '../modules/intencie-sopkovce/data'
 import { PLAN } from '../modules/farsky-list/data'
@@ -65,19 +66,23 @@ export function Nastavenia() {
         <dd>{ucet.typ === 'pracovny' ? 'pracovný (organizácia)' : 'osobný Microsoft účet'}</dd>
       </dl>
 
-      <h2>Kalendár</h2>
-      <p>Pripomienky z dlaždice Ľudia sa zapíšu do tvojho kalendára Outlook. Zapína sa v každom zariadení zvlášť.</p>
-      {prihlasenie.chybaPresmerovania && <p className="chyba">{prihlasenie.chybaPresmerovania}</p>}
-      {stavKalendara.stav === 'vypnuty' ? (
-        <button className="tlacidlo tlacidlo-hlavne" onClick={() => void pripojKalendar()}>
-          Pripojiť kalendár Outlook
-        </button>
-      ) : (
+      {config.kalendarOutlook && (
         <>
-          <p>Zapnuté. Stav vidno v dlaždici Ľudia.</p>
-          <button className="tlacidlo" onClick={() => kalendar.vypni()}>
-            Vypnúť (udalosti v kalendári ostanú)
-          </button>
+          <h2>Kalendár</h2>
+          <p>Pripomienky z dlaždice Ľudia sa zapíšu do tvojho kalendára Outlook. Zapína sa v každom zariadení zvlášť.</p>
+          {prihlasenie.chybaPresmerovania && <p className="chyba">{prihlasenie.chybaPresmerovania}</p>}
+          {stavKalendara.stav === 'vypnuty' ? (
+            <button className="tlacidlo tlacidlo-hlavne" onClick={() => void pripojKalendar()}>
+              Pripojiť kalendár Outlook
+            </button>
+          ) : (
+            <>
+              <p>Zapnuté. Stav vidno v dlaždici Ľudia.</p>
+              <button className="tlacidlo" onClick={() => kalendar.vypni()}>
+                Vypnúť (udalosti v kalendári ostanú)
+              </button>
+            </>
+          )}
         </>
       )}
 
@@ -86,11 +91,7 @@ export function Nastavenia() {
         <dt>Priečinok</dt>
         <dd>{info?.cesta ?? '/Pastoracia-app/data'}</dd>
         <dt>OneDrive</dt>
-        <dd>
-          {info
-            ? `${info.majitel} (${info.typDisku === 'business' ? 'pracovný' : 'osobný'})`
-            : chybaInfo || 'Načítavam…'}
-        </dd>
+        <dd>{info ? `${info.majitel} (${info.typDisku === 'business' ? 'pracovný' : 'osobný'})` : chybaInfo || 'Načítavam…'}</dd>
         {info?.webUrl && (
           <>
             <dt>Na webe</dt>

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { pozadovaneUdalosti } from '../modules/ludia/model/kalendar'
 import type { LudiaSubor, Pripomienka } from '../modules/ludia/model/ludia'
 import { ChybaPrihlasenia, ChybaSiete } from '../storage/types'
+import { udalostIcs } from './ics'
 import { KalendarOutlook, teloUdalosti } from './outlook'
 import { PamatovyKalendar } from './pamatovy'
 import { SynchronizaciaKalendara } from './synchronizacia'
@@ -169,5 +170,32 @@ describe('Outlook', () => {
     await expect(k.zmaz('u1')).resolves.toBeUndefined()
     status = 403
     await expect(k.zmaz('u1')).rejects.toBeInstanceOf(ChybaPrihlasenia)
+  })
+})
+
+describe('ics', () => {
+  const teraz = new Date('2026-10-24T17:00:00Z')
+
+  it('celodenná udalosť s upozornením deň predtým', () => {
+    const s = udalostIcs({ ...udalost('p-a'), nazov: 'Anna: po operácii, doma', text: '0905 123 456\nkľúč; u suseda' }, teraz)
+    expect(s.split('\r\n')).toEqual(
+      expect.arrayContaining([
+        'UID:p-a@pastoracia-app',
+        'DTSTAMP:20261024T170000Z',
+        'DTSTART;VALUE=DATE:20261101',
+        'DTEND;VALUE=DATE:20261102',
+        'SUMMARY:Anna: po operácii\\, doma',
+        'DESCRIPTION:0905 123 456\\nkľúč\\; u suseda',
+        'TRIGGER:-PT6H',
+      ]),
+    )
+    expect(s.endsWith('END:VCALENDAR\r\n')).toBe(true)
+  })
+
+  it('udalosť s časom', () => {
+    const s = udalostIcs({ ...udalost('p-a'), cas: '09:30' }, teraz)
+    expect(s).toContain('DTSTART:20261101T093000\r\nDURATION:PT15M')
+    expect(s).toContain('TRIGGER:-PT15M')
+    expect(s).not.toContain('DESCRIPTION:\r\n')
   })
 })
