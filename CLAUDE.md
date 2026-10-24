@@ -7,6 +7,7 @@ PWA pre gréckokatolíckeho kňaza Michala (farnosť Humenné – Pod Sokolejom,
 - **Pred `git push` a pred každou zmenou navonok (GitHub, Azure) sa opýtaj.**
 - Prácu deľ podľa náročnosti: mechanické veci → subagent Haiku, bežné UI → Sonnet, logika (dáta, synchronizácia, formát), kontrola a commit → ty. Agentom daj nekolidujúce súbory a podrobné zadanie, výsledok vždy skontroluj (testy, build, prečítanie kódu).
 - Tajomstvá necommituj (`.env.local` je v `.gitignore`).
+- Pri dlhej konverzácii (pripomienka `[kontext-strazca]`) postupuj podľa skillu `odovzdanie`: aktualizuj `HANDOFF.md` a navrhni `/clear` alebo `/compact`.
 
 ## Príkazy
 - `npm run dev` → http://localhost:5174/ (port 5173 obsadzuje Michalova iná aplikácia „Prípravy“, nevypínaj ju)

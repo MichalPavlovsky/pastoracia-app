@@ -9,6 +9,7 @@
 - Farský list: 8 týždňov + ďalší, témy (stav jedným klikom, ťahanie ⋮⋮ aj ▲▼, presun, mazanie), Vložiť odkaz zo schránky, prijatie odkazu cez `#/farsky-list/pridat?url=…`.
 - Nastavenia: účet, priečinok OneDrive, stav synchronizácie, vzhľad, odhlásenie.
 - Nasadené na GitHub Pages (beh Actions úspešný, stránka obsahuje správne premenné). NAVOD.md napísaný.
+- Strážca dĺžky konverzácie: hook `~/.claude/hooks/kontext-strazca.mjs` (UserPromptSubmit, hranice 200/300 tis. tokenov) + skill `~/.claude/skills/odovzdanie/SKILL.md`. Overiť, že sa v novej konverzácii naozaj spúšťa.
 - Vault aktualizovaný (cesta k dátam, 5 dlaždíc); Cowork upravil nainštalovaný skill `farsky-list`, aby si vyžiadal priečinok s dátami.
 
 ## Čaká na Michala – testovací zoznam (na iPhone)
