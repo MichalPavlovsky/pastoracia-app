@@ -5,6 +5,9 @@ import App from './App'
 import { nacitajFarbu, nacitajTemu, pouziFarbu, pouziTemu } from './ui/tema'
 import './ui/zaklad.css'
 
+// po obnovení stránky (napr. nová verzia) by iPhone vrátil starý posun – často na spodok
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+
 pouziTemu(nacitajTemu())
 pouziFarbu(nacitajFarbu())
 

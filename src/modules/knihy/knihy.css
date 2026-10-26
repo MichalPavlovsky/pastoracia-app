@@ -38,6 +38,27 @@
   margin-top: 1rem;
 }
 
+.knihy-listovanie {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 38rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--okraj);
+}
+
+.knihy-listovanie > .tlacidlo {
+  flex: 0 1 50%;
+}
+
+.knihy-listovanie > .knihy-dalsi {
+  margin-left: auto;
+}
+
+.knihy .knihy-dnes {
+  scroll-margin-top: calc(72px + env(safe-area-inset-top));
+}
+
 .knihy-hotovo {
   margin: 0;
   color: var(--ok);

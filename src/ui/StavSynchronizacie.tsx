@@ -25,7 +25,7 @@ export function StavSynchronizacie<T>({ stav, subor }: { stav: StavSuboru; subor
         {stav.chyba && stav.stav !== 'offline' ? `: ${stav.chyba}` : ''}
       </p>
       {prihlasZnova && (
-        <button className="tlacidlo" onClick={() => void prihlasenie.prihlas()}>
+        <button className="tlacidlo" onClick={() => void prihlasenie.obnovPrihlasenie()}>
           Prihlásiť sa znova
         </button>
       )}

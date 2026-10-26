@@ -5,6 +5,7 @@
 // prežilo zatvorenie aplikácie.
 
 import {
+  AuthError,
   BrowserCacheLocation,
   InteractionRequiredAuthError,
   PublicClientApplication,
@@ -38,6 +39,8 @@ export class Prihlasenie {
       OIDCOptions: { responseMode: 'query' },
     },
     cache: { cacheLocation: BrowserCacheLocation.LocalStorage },
+    // tiché obnovenie cez skrytý rámec na iPhone väčšinou nejde – nech to nečaká dlho
+    system: { iframeBridgeTimeout: 6000 },
   })
 
   private spustenie: Promise<AccountInfo | null> | null = null
@@ -62,7 +65,38 @@ export class Prihlasenie {
     }
     const ucet = vysledok?.account ?? this.pca.getActiveAccount() ?? this.pca.getAllAccounts()[0] ?? null
     if (ucet) this.pca.setActiveAccount(ucet)
+    if (ucet && !vysledok && (await this.trebaObnovit())) {
+      await this.obnovPrihlasenie()
+      return new Promise(() => {}) // stránka odchádza na Microsoft
+    }
     return ucet
+  }
+
+  /**
+   * Obnovovací token jednostránkovej aplikácie platí 24 h a tiché obnovenie na iPhone
+   * nefunguje. Pri spustení preto radšej hneď presmerujeme (Microsoft si účet pamätá,
+   * zvyčajne netreba nič zadávať). Najviac raz za 5 minút, aby nevznikol kruh.
+   */
+  private async trebaObnovit(): Promise<boolean> {
+    if (!navigator.onLine) return false
+    try {
+      await this.token(SCOPES, false, '')
+      return false
+    } catch (e) {
+      if (!(e instanceof ChybaPrihlasenia)) return false
+      const KLUC = 'pastoracia.obnovaPrihlasenia'
+      const posledne = Number(sessionStorage.getItem(KLUC) ?? 0)
+      if (Date.now() - posledne < 5 * 60_000) return false
+      sessionStorage.setItem(KLUC, String(Date.now()))
+      return true
+    }
+  }
+
+  /** Znova získa token presmerovaním bez výberu účtu. */
+  obnovPrihlasenie(): Promise<void> {
+    const account = this.pca.getActiveAccount()
+    if (!account) return this.prihlas()
+    return this.pca.acquireTokenRedirect({ scopes: SCOPES, account, loginHint: account.username })
   }
 
   prihlas(): Promise<void> {
@@ -100,9 +134,14 @@ export class Prihlasenie {
       const r = await this.pca.acquireTokenSilent({ scopes, account, forceRefresh: obnov })
       return r.accessToken
     } catch (e) {
-      if (e instanceof InteractionRequiredAuthError) throw new ChybaPrihlasenia(sprava)
       if (!navigator.onLine) throw new ChybaSiete()
+      if (e instanceof InteractionRequiredAuthError || jeVyprsanieRamca(e)) throw new ChybaPrihlasenia(sprava)
       throw e
     }
   }
+}
+
+/** Tiché obnovenie cez skrytý rámec vypršalo (iPhone blokuje cookies tretích strán). */
+function jeVyprsanieRamca(e: unknown): boolean {
+  return e instanceof AuthError && (e.errorCode === 'timed_out' || e.errorCode === 'monitor_window_timeout')
 }

@@ -135,25 +135,42 @@ export function zlucStav(zaklad: KnihyStav, moje: KnihyStav, ich: KnihyStav): Vy
 
 // ---------- čítanie ----------
 
-export interface DnesnyUryvok {
+export interface UryvokVPoradi {
   kniha: Kniha
   uryvok: Uryvok
   /** poradie úryvku v knihe od 1 */
   poradie: number
+  /** poradie v celom zozname (všetky knihy za sebou) od 0 */
+  index: number
+}
+
+export interface DnesnyUryvok extends UryvokVPoradi {
   precitanyDnes: boolean
 }
 
-/** Úryvok prečítaný dnes, inak prvý neprečítaný v poradí knihy.json; `null`, ak je všetko prečítané. */
+/** Všetky úryvky v poradí čítania (knihy za sebou). */
+export function vsetkyUryvky(knihy: KnihySubor): UryvokVPoradi[] {
+  const vysledok: UryvokVPoradi[] = []
+  for (const kniha of knihy.knihy) {
+    for (const [i, uryvok] of kniha.uryvky.entries()) vysledok.push({ kniha, uryvok, poradie: i + 1, index: vysledok.length })
+  }
+  return vysledok
+}
+
+/** Kedy bol úryvok prečítaný, alebo `null`. */
+export function datumPrecitania(stav: KnihyStav, id: string): string | null {
+  return stav.precitane.find((p) => p.uryvok === id)?.datum ?? null
+}
+
+/** Posledný dnes prečítaný úryvok, inak prvý neprečítaný v poradí knihy.json; `null`, ak je všetko prečítané. */
 export function dnesnyUryvok(knihy: KnihySubor, stav: KnihyStav, dnes: string): DnesnyUryvok | null {
   const precitane = new Map(stav.precitane.map((p) => [p.uryvok, p.datum]))
   let prvyNeprecitany: DnesnyUryvok | null = null
   let dnesny: DnesnyUryvok | null = null
-  for (const kniha of knihy.knihy) {
-    for (const [i, uryvok] of kniha.uryvky.entries()) {
-      const datum = precitane.get(uryvok.id)
-      if (datum === dnes) dnesny ??= { kniha, uryvok, poradie: i + 1, precitanyDnes: true }
-      if (datum === undefined) prvyNeprecitany ??= { kniha, uryvok, poradie: i + 1, precitanyDnes: false }
-    }
+  for (const u of vsetkyUryvky(knihy)) {
+    const datum = precitane.get(u.uryvok.id)
+    if (datum === dnes) dnesny = { ...u, precitanyDnes: true }
+    if (datum === undefined) prvyNeprecitany ??= { ...u, precitanyDnes: false }
   }
   return dnesny ?? prvyNeprecitany
 }

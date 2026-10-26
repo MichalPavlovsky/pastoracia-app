@@ -77,6 +77,12 @@ describe('dnešný úryvok', () => {
     expect(u?.precitanyDnes).toBe(true)
   })
 
+  it('pri viacerých dnes prečítaných platí posledný', () => {
+    const u = dnesnyUryvok(KNIHY, stav([['a-001', '2026-10-25'], ['a-002', '2026-10-25']]), '2026-10-25')
+    expect(u?.uryvok.id).toBe('a-002')
+    expect(u?.index).toBe(1)
+  })
+
   it('všetko prečítané → null', () => {
     const vsetko = KNIHY.knihy.flatMap((k) => k.uryvky.map((u): [string, string] => [u.id, '2026-10-01']))
     expect(dnesnyUryvok(KNIHY, stav(vsetko), '2026-10-25')).toBeNull()

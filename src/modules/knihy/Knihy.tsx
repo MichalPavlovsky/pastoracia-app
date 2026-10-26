@@ -1,11 +1,12 @@
 // Modul „Knihy“: zamyslenie dňa. knihy.json píše len Claude, aplikácia ukladá iba knihy-stav.json.
 
-import { useState } from 'react'
-import { dnes } from '../../lib/datum'
+import { useRef, useState } from 'react'
+import { dnes, formatDatum } from '../../lib/datum'
 import { useSubor } from '../../storage/useSubor'
 import { StavSynchronizacie } from '../../ui/StavSynchronizacie'
 import { KNIHY, KNIHY_STAV } from './data'
 import {
+  datumPrecitania,
   dnesnyUryvok,
   jeOblubeny,
   oblubeneUryvky,
@@ -13,6 +14,7 @@ import {
   postupKnihy,
   prepniOblubeny,
   trebaNacitat,
+  vsetkyUryvky,
   zrusPrecitany,
   type KnihyStav,
   type Kniha,
@@ -73,6 +75,18 @@ export function Knihy() {
 
   const den = dnes()
   const dnesny = dnesnyUryvok(knihy.data, stav.data, den)
+  const zoznam = vsetkyUryvky(knihy.data)
+  // úryvok vybraný šípkami; inak dnešný
+  const [vybraneId, setVybraneId] = useState<string | null>(null)
+  const aktualny = zoznam.find((u) => u.uryvok.id === vybraneId) ?? dnesny
+  const datum = aktualny ? datumPrecitania(stav.data, aktualny.uryvok.id) : null
+  const predosly = aktualny ? zoznam[aktualny.index - 1] : undefined
+  const dalsi = aktualny ? zoznam[aktualny.index + 1] : undefined
+  const clanok = useRef<HTMLElement>(null)
+  const chod = (id: string) => {
+    setVybraneId(id)
+    clanok.current?.scrollIntoView({ block: 'start' })
+  }
   const oblubene = oblubeneUryvky(knihy.data, stav.data)
   const ziadneKnihy = knihy.data.knihy.length === 0
 
@@ -103,27 +117,27 @@ export function Knihy() {
         </div>
       )}
 
-      {dnesny ? (
-        <article className="knihy-dnes">
-          <h2 className="knihy-nadpis">{dnesny.uryvok.nadpis}</h2>
-          <Podpis kniha={dnesny.kniha} uryvok={dnesny.uryvok} />
-          <Text text={dnesny.uryvok.text} />
+      {aktualny ? (
+        <article className="knihy-dnes" ref={clanok}>
+          <h2 className="knihy-nadpis">{aktualny.uryvok.nadpis}</h2>
+          <Podpis kniha={aktualny.kniha} uryvok={aktualny.uryvok} />
+          <Text text={aktualny.uryvok.text} />
 
           <p className="knihy-postup-text">
-            Úryvok {dnesny.poradie} z {dnesny.kniha.uryvky.length}
+            Úryvok {aktualny.poradie} z {aktualny.kniha.uryvky.length}
           </p>
           <progress
             className="knihy-pruh"
-            max={dnesny.kniha.uryvky.length}
-            value={postupKnihy(dnesny.kniha, stav.data).precitane}
+            max={aktualny.kniha.uryvky.length}
+            value={postupKnihy(aktualny.kniha, stav.data).precitane}
             aria-label="Postup v knihe"
           />
 
           <div className="rad-tlacidiel knihy-akcie">
-            {dnesny.precitanyDnes ? (
+            {datum ? (
               <>
-                <p className="knihy-hotovo">Prečítané dnes ✓</p>
-                <button type="button" className="tlacidlo" onClick={() => uloz((d) => zrusPrecitany(d, dnesny.uryvok.id))}>
+                <p className="knihy-hotovo">{datum === den ? 'Prečítané dnes ✓' : `Prečítané ${formatDatum(datum)} ✓`}</p>
+                <button type="button" className="tlacidlo" onClick={() => uloz((d) => zrusPrecitany(d, aktualny.uryvok.id))}>
                   Zrušiť
                 </button>
               </>
@@ -131,7 +145,7 @@ export function Knihy() {
               <button
                 type="button"
                 className="tlacidlo tlacidlo-hlavne"
-                onClick={() => uloz((d) => oznacPrecitany(d, dnesny.uryvok.id, den))}
+                onClick={() => uloz((d) => oznacPrecitany(d, aktualny.uryvok.id, den))}
               >
                 Prečítané ✓
               </button>
@@ -139,12 +153,29 @@ export function Knihy() {
             <button
               type="button"
               className="tlacidlo knihy-hviezda"
-              aria-pressed={jeOblubeny(stav.data, dnesny.uryvok.id)}
-              aria-label={jeOblubeny(stav.data, dnesny.uryvok.id) ? 'Odobrať z obľúbených' : 'Pridať do obľúbených'}
-              onClick={() => uloz((d) => prepniOblubeny(d, dnesny.uryvok.id))}
+              aria-pressed={jeOblubeny(stav.data, aktualny.uryvok.id)}
+              aria-label={jeOblubeny(stav.data, aktualny.uryvok.id) ? 'Odobrať z obľúbených' : 'Pridať do obľúbených'}
+              onClick={() => uloz((d) => prepniOblubeny(d, aktualny.uryvok.id))}
             >
-              {jeOblubeny(stav.data, dnesny.uryvok.id) ? '⭐' : '☆'}
+              {jeOblubeny(stav.data, aktualny.uryvok.id) ? '⭐' : '☆'}
             </button>
+          </div>
+
+          <div className="knihy-listovanie">
+            {predosly && (
+              <button type="button" className="tlacidlo" onClick={() => chod(predosly.uryvok.id)}>
+                ‹ Predošlý
+              </button>
+            )}
+            {dalsi && (
+              <button
+                type="button"
+                className={datum ? 'tlacidlo tlacidlo-hlavne knihy-dalsi' : 'tlacidlo knihy-dalsi'}
+                onClick={() => chod(dalsi.uryvok.id)}
+              >
+                Ďalší úryvok ›
+              </button>
+            )}
           </div>
         </article>
       ) : (
