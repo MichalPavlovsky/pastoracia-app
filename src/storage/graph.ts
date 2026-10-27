@@ -107,6 +107,30 @@ export class GraphOneDrive implements VzdialeneUloziste {
     return { nazov: subor.name, cesta: `${PRIECINOK_PRILOHY}/${priecinok}/${j.name}`, webUrl: j.webUrl }
   }
 
+  /**
+   * Nahrá súbor do data/<cesta> (napr. poriadky/2026-11-02/a.doc). Nič neprepíše:
+   * ak tam už súbor s takým názvom je, vráti `false`.
+   */
+  async nahrajDoDat(cesta: string, subor: File): Promise<boolean> {
+    const url = `${GRAPH}/me/drive/root:/${cestaUrl(`${PRIECINOK}/${cesta}`)}:/content?@microsoft.graph.conflictBehavior=fail`
+    const res = await this.poziadavka(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': subor.type || 'application/octet-stream' },
+      body: subor,
+    }, false, 120_000)
+    if (res.status === 409) return false
+    await overOk(res)
+    return true
+  }
+
+  /** Odkaz na otvorenie súboru z data/<cesta> v OneDrive na webe, alebo "" ak neexistuje. */
+  async odkazVDatach(cesta: string): Promise<string> {
+    const res = await this.poziadavka(`${GRAPH}/me/drive/root:/${cestaUrl(`${PRIECINOK}/${cesta}`)}?$select=webUrl`)
+    if (res.status === 404) return ''
+    await overOk(res)
+    return ((await res.json()) as { webUrl: string }).webUrl
+  }
+
   /** Zmaže prílohu (v OneDrive ide do koša). Neexistujúca nevadí. */
   async zmazPrilohu(cesta: string): Promise<void> {
     const res = await this.poziadavka(`${GRAPH}/me/drive/root:/${cesta.split('/').map(encodeURIComponent).join('/')}`, { method: 'DELETE' })
@@ -123,6 +147,10 @@ export class GraphOneDrive implements VzdialeneUloziste {
     const webUrl = p.ok ? ((await p.json()) as { webUrl: string }).webUrl : ''
     return { cesta: `/${PRIECINOK}`, webUrl, majitel: d.owner?.user?.displayName ?? '', typDisku: d.driveType }
   }
+}
+
+function cestaUrl(cesta: string): string {
+  return cesta.split('/').map(encodeURIComponent).join('/')
 }
 
 async function overOk(res: Response): Promise<void> {

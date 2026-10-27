@@ -184,6 +184,39 @@ Komu sa ozvať (dlaždica Ľudia).
   v čase zápisu). Aplikácia porovná udalosti s pripomienkami a chýbajúce vytvorí, zmenené upraví, nepotrebné
   (hotové, zmazané) zmaže. Pravidelný kontakt do kalendára nejde.
 
+## poriadky-humenne.json
+
+Nahraté bohoslužobné poriadky farnosti Humenné (.doc/.docx) podľa týždňov. Zapisuje aplikácia (Intencie Sopkovce
+→ Tento/Budúci týždeň → „Nahrať poriadok Humenné“). Samotné súbory sú v `/Pastoracia-app/data/poriadky/<pondelok>/`
+s pôvodným názvom; ich obsah aplikácia nečíta, použije ho Claude pri Farskom liste (skill `fl`).
+
+```json
+{
+  "verzia": 1,
+  "tyzdne": [
+    {
+      "pondelok": "2026-11-02",
+      "subory": [
+        {
+          "cesta": "poriadky/2026-11-02/45. 02. 11. - 08. 11. 2026.doc",
+          "nazov": "45. 02. 11. - 08. 11. 2026.doc",
+          "nahrane": "2026-10-30T18:20"
+        }
+      ]
+    }
+  ]
+}
+```
+
+- `pondelok`: pondelok týždňa (Po–Ne). Aplikácia ho navrhne z názvu `{týždeň}. {dd. mm.} - {dd. mm. rrrr}.doc`
+  (týždeň cez Nový rok začína v predošlom roku), inak ho Michal vyberie ručne.
+- `cesta`: relatívne k priečinku `data/`. `nazov`: názov súboru na OneDrive – ak už v týždni rovnaký je, dostane „ (2)“,
+  „ (3)“ … (existujúci súbor sa nikdy neprepíše). `nahrane`: lokálny čas (Europe/Bratislava) `RRRR-MM-DDTHH:MM`.
+- `tyzdne` zoradené podľa `pondelok`, `subory` podľa `nahrane`. Týždeň bez súborov sa neukladá (zmazaním posledného
+  súboru zmizne). Pri zmazaní sa odstráni súbor z OneDrive aj záznam.
+- Kým na budúci týždeň nie je nahraný žiadny súbor, dlaždica Intencie ukazuje odznak „!“ („Poriadok chýba“).
+- Zlúčenie: podľa `cesta` (pridané na oboch zariadeniach sa spojí, zmazanie sa rešpektuje).
+
 ## knihy.json
 
 Úryvky na zamyslenie dňa. **Zapisuje ho len Claude** (spracovanie kníh na PC), aplikácia ho iba číta.
@@ -231,7 +264,7 @@ Poradie v `knihy` = poradie čítania (číta sa jedna kniha od začiatku do kon
 }
 ```
 
-- Dnešný úryvok = úryvok prečítaný dnes, inak prvý neprečítaný v poradí `knihy.json`.
+- Dnešný úryvok = posledný (v poradí) prečítaný dnes, inak prvý neprečítaný v poradí `knihy.json`.
 - Keď má neprečítané úryvky už len jedna kniha, aplikácia ukáže „Treba načítať nové knihy“ (Claude sa opýta
   a spracuje ďalšie dve z rebríčka). Aktívne sú vždy 3 knihy.
 - Zlúčenie: zjednotenie oboch zoznamov (podľa `uryvok`, resp. id), pri `oblubene` sa rešpektuje odobratie.

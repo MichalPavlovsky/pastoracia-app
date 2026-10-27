@@ -1,0 +1,97 @@
+.ph {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--okraj);
+}
+
+.ph .ph-nadpis {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.ph-zoznam {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ph-polozka {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 6px 8px 6px 12px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+}
+
+.ph-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ph-nazov {
+  overflow-wrap: anywhere;
+}
+
+.ph-cas {
+  font-size: 0.85rem;
+  color: var(--text-slabsi);
+}
+
+.ph .ph-zmaz {
+  flex: none;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 10px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ph-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--okraj);
+  border-radius: var(--zaoblenie);
+  background: var(--plocha);
+}
+
+.ph-subor {
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+
+.ph .ph-panel input[type='date'] {
+  min-height: 48px;
+  font-size: 16px;
+  max-width: 100%;
+}
+
+.ph-tlacidla {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ph .ph-pomoc {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  color: var(--text-slabsi);
+}
+
+.ph .ph-panel .ph-pomoc {
+  margin: 0;
+}

@@ -84,4 +84,15 @@ describe('GraphOneDrive', () => {
       'OneDrive vrátil chybu 403: Access denied',
     )
   })
+
+  it('nahratie do data/ nič neprepíše – existujúci súbor vráti false', async () => {
+    const { g, fetchFn } = graph(odpoved(201, { name: 'a b.doc' }), odpoved(409, { error: { message: 'nameAlreadyExists' } }))
+    const subor = new File(['x'], 'a b.doc')
+    expect(await g.nahrajDoDat('poriadky/2026-11-02/a b.doc', subor)).toBe(true)
+    expect(volanie(fetchFn, 0).url).toBe(
+      `${GRAPH}/me/drive/root:/Pastoracia-app/data/poriadky/2026-11-02/a%20b.doc:/content?@microsoft.graph.conflictBehavior=fail`,
+    )
+    expect(volanie(fetchFn, 0).init.method).toBe('PUT')
+    expect(await g.nahrajDoDat('poriadky/2026-11-02/a b.doc', subor)).toBe(false)
+  })
 })

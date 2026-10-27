@@ -11,6 +11,7 @@ import { nahradDen, najdiDen, pridajBohosluzbu, ulozDen, type Bohosluzba, type D
 import { FormularDna } from './FormularDna'
 import { mesiacDatumu } from './kalendar'
 import { MesacnyKalendar } from './MesacnyKalendar'
+import { PoriadokHumenne } from './PoriadokHumenne'
 import { TyzdennyPrehlad } from './TyzdennyPrehlad'
 
 type Pohlad = 'mesiac' | 'tento' | 'buduci'
@@ -74,6 +75,7 @@ export function Intencie({ podcesta }: { podcesta: string }) {
   }
 
   const pondelok = pondelokTyzdna(dnesny)
+  const tyzden = pohlad === 'tento' ? pondelok : pridajDni(pondelok, 7)
   return (
     <>
       <StavSynchronizacie stav={stav} subor={subor} />
@@ -93,12 +95,10 @@ export function Intencie({ podcesta }: { podcesta: string }) {
       {pohlad === 'mesiac' ? (
         <MesacnyKalendar subor={data} mesiac={mesiac} dnes={dnesny} onZmenMesiac={setMesiac} onVyberDen={otvor} />
       ) : (
-        <TyzdennyPrehlad
-          subor={data}
-          pondelok={pohlad === 'tento' ? pondelok : pridajDni(pondelok, 7)}
-          dnes={dnesny}
-          onVyberDen={otvor}
-        />
+        <>
+          <TyzdennyPrehlad subor={data} pondelok={tyzden} dnes={dnesny} onVyberDen={otvor} />
+          <PoriadokHumenne pondelok={tyzden} jeBuduci={pohlad === 'buduci'} />
+        </>
       )}
     </>
   )

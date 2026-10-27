@@ -83,6 +83,8 @@ export function ukazkovaAplikacia(prihlasenie: Prihlasenie): Aplikacia {
       const nazov = decodeURIComponent(url.split(':/content')[0]!.split('/').pop()!)
       return Response.json({ name: nazov, webUrl: 'about:blank' })
     }
+    if (init?.method === 'PUT' && url.includes('/poriadky/')) return Response.json({ name: 'x' })
+    if (url.includes('/poriadky/') && url.includes('webUrl')) return Response.json({ webUrl: 'about:blank' })
     if (init?.method === 'DELETE') return new Response(null, { status: 204 })
     throw new Error('Ukážkový režim – bez OneDrive')
   }

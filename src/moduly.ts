@@ -3,6 +3,7 @@
 import type { ComponentType } from 'react'
 import { FarskyList } from './modules/farsky-list/FarskyList'
 import { Intencie } from './modules/intencie-sopkovce/Intencie'
+import { OdznakIntencii } from './modules/intencie-sopkovce/Odznak'
 import { Knihy } from './modules/knihy/Knihy'
 import { OdznakKnih } from './modules/knihy/Odznak'
 import { Ludia } from './modules/ludia/Ludia'
@@ -31,6 +32,7 @@ export const MODULY: ModulInfo[] = [
     cesta: '/intencie',
     Ikona: IkonaKalendar,
     Obrazovka: Intencie,
+    Odznak: OdznakIntencii,
   },
   {
     id: 'farsky-list',
